@@ -1,0 +1,48 @@
+extends layout
+
+block navbar
+  nav.navbar.navbar-expand-lg.navbar-light.bg-white
+    a.navbar-brand(href='/') 
+      img(src="https://png.icons8.com/color/48/000000/yoda.png")
+      |   Stash Master
+    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.mr-auto
+        li.nav-item.active
+          a.nav-link(href='/home')
+            | Home 
+            span.sr-only (current)
+        li.nav-item
+          a.nav-link(href='/manage-users') User Management
+        li.nav-item
+          a.nav-link(ng-click="showAbout()", href='#') About
+
+block content
+  .container
+    .row
+      .col-12.text-center
+        br
+        .alert.alert-warning Repository Overview
+    .row(ng-init="getRepoDetails()")
+      .col-4(ng-repeat="item in stashlist")
+        .card
+          .card-body.text-center
+            h5.card-title {{item}}
+            hr
+            h6.card-subtitle.mb-2.text-muted git clone http://{{host}}/{{item}}.git
+          .card-footer.text-center.bg-dark
+            .btn-group(role='group', aria-label='Repository Actions')
+              button.btn.btn-success(ng-click="userRepoMgmnt(item)", type='button') Manage UA
+              button.btn.btn-danger(ng-click="deleteRepo(item)", type='button') Delete Repository
+      .col-12.text-center(ng-if="stashlist.length == 0")
+        .alert.alert-primary.font-weight-bold 
+          br
+          br
+          img(src="https://png.icons8.com/dusk/64/000000/empty-box.png")
+          br
+          br
+          | Create a repository to get started !
+          br
+          br
+
