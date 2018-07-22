@@ -9,14 +9,17 @@
   "author": "Ramit Mitra",
   "license": "Apache-2.0",
   "dependencies": {
+    "ansi-to-html": "^0.6.6",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
+    "express-favicon": "^2.0.1",
     "git-server": "^0.2.0",
     "morgan": "^1.9.0",
     "node-git-server": "^0.4.3",
     "pug": "^2.0.3",
     "rimraf": "^2.6.2",
+    "shelljs": "^0.8.2",
     "socket.io": "^2.1.1"
   }
 }

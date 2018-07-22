@@ -127,3 +127,28 @@ app.controller('manageusers', function ($scope, $http, $interval) {
     // scheduling tasks
     $interval($scope.getUsers, 2323);
 });
+
+/** Service Integration App */
+app.controller('svcintgn', function ($scope, $http, $interval) {
+
+    $scope.message = '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>';
+    
+    $scope.getJenkinsOutput = function () {
+        $http.get('/api/get-jenkins-output').then(function (res) {
+            $scope.message = res.data;
+        });
+    }
+
+    $scope.showJenkinsOutput = function () {
+        bootbox.dialog({
+            message: $scope.message,
+            onEscape: true,
+            backdrop: true,
+            closeButton: true,
+            size: 'large'
+        });
+    }
+
+    // scheduling tasks
+    $interval($scope.getJenkinsOutput, 2323);
+});

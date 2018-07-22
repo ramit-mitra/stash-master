@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const server = require('node-git-server');
+const favicon = require('express-favicon');
 const app = express();
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
@@ -11,14 +12,15 @@ const apiRouter = require('./routes/api');
 /**
  *  GLOBAL APP CONSTANTS 
  */
-global.gitPort = process.env.PORT || 5055;
-global.appPort = 8080;
+global.gitPort = process.env.GITPORT || 5055;
+global.appPort = process.env.APPPORT || 2323;
 global.stashDir = 'git-stash';
 
 /**
  *  WEBFRONT APP
  */
 app.listen(appPort);
+app.use(favicon(__dirname + '/public/favicon.png'));
 console.log(`WEBFRONT running at http://localhost:${appPort}`);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -82,5 +84,15 @@ repos.on('fetch', (fetch) => {
 repos.listen(gitPort, () => {
     console.log(`NODE GIT SERVER running at http://localhost:${gitPort}`)
 });
+
+/**
+ * JENKINS INTEGRATION
+ */
+require('./services/jenkins');
+
+/**
+ * SONARQUBE INTEGRATION
+ */
+// require('./services/sonarqube');
 
 module.exports = app;
