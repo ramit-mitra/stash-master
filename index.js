@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const server = require('node-git-server');
+// const server = require('node-git-server');
 const favicon = require('express-favicon');
 const app = express();
 const indexRouter = require('./routes/index');
@@ -15,6 +15,15 @@ const apiRouter = require('./routes/api');
 global.gitPort = process.env.GITPORT || 5055;
 global.appPort = process.env.APPPORT || 2323;
 global.stashDir = 'git-stash';
+// LOAD USERs & REPOSITORY PERMISSION DATA
+global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
+global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
+
+
+/* WELCOME MESSAGE */
+console.log('WELCOME TO STASH MASTER');
+console.log('An integrated GIT STASH + Jenkins system to power your devops necessity.');
+console.log('THE FOLLOWING SERVICES ARE UP & RUNNING ::');
 
 /**
  *  WEBFRONT APP
@@ -51,39 +60,9 @@ app.use(function (err, req, res, next) {
 });
 
 /**
- *  GIT STASH
+ * GIT STASH INTEGRATION
  */
-// LOAD USERs & REPOSITORY PERMISSION DATA
-global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
-global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
-
-const repos = new server(path.resolve(__dirname, stashDir), {
-    autoCreate: true,
-    authenticate: (type, repo, user, next) => {
-        if (type == 'push') {
-            user((username, password) => {
-                console.log(username, password);
-                next();
-            });
-        } else {
-            next();
-        }
-    }
-});
-/* EVENT HANDLERS */
-repos.on('push', (push) => {
-    console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
-    push.accept();
-});
-
-repos.on('fetch', (fetch) => {
-    console.log(`fetch ${fetch.commit}`);
-    fetch.accept();
-});
-
-repos.listen(gitPort, () => {
-    console.log(`NODE GIT SERVER running at http://localhost:${gitPort}`)
-});
+require('./services/stash');
 
 /**
  * JENKINS INTEGRATION

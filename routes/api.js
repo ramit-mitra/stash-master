@@ -72,12 +72,15 @@ router.post('/delete', function (req, res) {
 // fetch user repository permission details
 router.get('/get-user-repo-perm/:reponame', function (req, res) {
     let reponame = req.params.reponame;
-    if (!global.permissions.reponame) {
-        global.permissions.reponame = [];
-    }
 
-    //finally
-    fs.writeFile('./app-data/permissions.json', JSON.stringify(global.permissions));
+    console.log(reponame)
+
+    if (!global.permissions.hasOwnProperty(reponame)) {
+        //if there is no existing entry for this repo in permission DS, add a blank key
+        //and save to file
+        global.permissions[reponame] = [];
+        fs.writeFile('./app-data/permissions.json', JSON.stringify(global.permissions));
+    }
 
     res.json({
         permissions: global.permissions.reponame,
@@ -89,6 +92,22 @@ router.get('/get-user-repo-perm/:reponame', function (req, res) {
 // fetch user list
 router.get('/get-users', function (req, res) {
     res.json(global.users);
+});
+
+// get console output for a running service
+router.get('/get-output/:service', function (req, res) {
+    let service = req.params.service;
+    switch (service) {
+        case 'jenkins':
+            var data = fs.readFileSync('./console_output/jenkins-output.html');
+            break;
+        default:
+            res.send(404);
+            res.end();
+    }
+    res.status(200);
+    res.write(data);
+    res.end();
 });
 
 module.exports = router;

@@ -39,7 +39,7 @@ block content
             h6.card-subtitle.mb-2.text-muted git clone http://{{host}}/{{item}}.git
           .card-footer.text-center.bg-dark
             .btn-group(role='group', aria-label='Repository Actions')
-              button.btn.btn-success(ng-click="userRepoMgmnt(item)", type='button') Manage UA
+              button.btn.btn-success(ng-click="userRepoMgmnt(item)", type='button', data-toggle="modal", data-target="#manageusrperm") Manage UA
               button.btn.btn-danger(ng-click="deleteRepo(item)", type='button') Delete Repository
       .col-12.text-center(ng-if="stashlist.length == 0")
         .alert.alert-primary.font-weight-bold 
@@ -51,4 +51,39 @@ block content
           | Create a repository to get started !
           br
           br
+  .modal.fade#manageusrperm(tabindex='-1', role='dialog')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5.modal-title Manage User Access
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .container-fluid
+            .row
+              .col-12
+                p.text-justify.font-weight-light
+                    | Grant & revoke access to this repository over http/https. To add/remove users, visit the User Management section. R stands
+                    | for Read Only access and W stands for Write Only access. To provide Read & Write access, check both the options.
+                hr
+                .alert.alert-primary
+                  h5.font-weight-light Permission Overview
+                br
+          .container-fluid
+            form.text-center.row
+              .form-group.col-12(ng-repeat='user in permstack.users.active')
+                .row
+                  .col-4
+                    label.font-weight-bold(for='username') {{ user.username }}
+                  .col-4
+                    .form-check.form-check-inline
+                        input#inlineCheckbox1.form-check-input(type='checkbox', value='read')
+                        label.form-check-label(for='inlineCheckbox1') Read (R)
+                  .col-4
+                      .form-check.form-check-inline
+                        input#inlineCheckbox2.form-check-input(type='checkbox', value='write')
+                        label.form-check-label(for='inlineCheckbox2') Write (W)
+              br
+        .modal-footer
+          button.btn.btn-success(type='button') Save
 

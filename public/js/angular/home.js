@@ -5,6 +5,7 @@ var app = angular.module('home', []);
 app.controller('default', function ($scope, $http, $interval) {
     $scope.stashlist = [];
     $scope.host;
+    $scope.permstack = {};
 
     $scope.getRepoDetails = function () {
         $http.get('/api/get-repo-details').then(function (res) {
@@ -28,24 +29,7 @@ app.controller('default', function ($scope, $http, $interval) {
     $scope.userRepoMgmnt = function (reponame) {
         // fetch user vs repo permissions
         $http.get('/api/get-user-repo-perm/' + reponame).then(function (response) {
-            console.log(response.data);
-            bootbox.dialog({
-                title: 'Manage User Access',
-                message: '<p class="text-justify font-weight-light">Create a new stash user by filling up the form below. Once you"ve created an user, you can go ahead and provide repository specific permission from homepage.</p><br><form> <div class="form-group"> <label for="username">Username</label> <input required type="text" class="form-control" id="username" aria-describedby="username" placeholder="Enter Username"> </div><div class="form-group"> <label for="password">Password</label> <input required type="password" class="form-control" id="password" placeholder="Password"> </div></form><br>',
-                onEscape: true,
-                backdrop: true,
-                closeButton: false,
-                size: 'large',
-                buttons: {
-                    ok: {
-                        label: "Update",
-                        className: 'btn-secondary',
-                        callback: function () {
-                            alert(555);
-                        }
-                    }
-                }
-            });
+            $scope.permstack = response.data;
         });
     }
 
@@ -132,23 +116,24 @@ app.controller('manageusers', function ($scope, $http, $interval) {
 app.controller('svcintgn', function ($scope, $http, $interval) {
 
     $scope.message = '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>';
-    
+
     $scope.getJenkinsOutput = function () {
-        $http.get('/api/get-jenkins-output').then(function (res) {
+        $http.get('/api/get-output/jenkins').then(function (res) {
             $scope.message = res.data;
         });
     }
 
     $scope.showJenkinsOutput = function () {
         bootbox.dialog({
-            message: $scope.message,
+            title: "Jenkins Console",
+            message: $scope.message + '<br>',
             onEscape: true,
             backdrop: true,
-            closeButton: true,
+            closeButton: false,
             size: 'large'
         });
     }
 
     // scheduling tasks
-    $interval($scope.getJenkinsOutput, 2323);
+    $interval($scope.getJenkinsOutput, 5555);
 });
