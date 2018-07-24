@@ -5,6 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Stash content
+git-stash/
+
+# Console output files
+console_output/
+
 # Runtime data
 pids
 *.pid
