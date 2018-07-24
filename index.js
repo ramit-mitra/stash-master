@@ -65,7 +65,7 @@ require('./services/stash');
 /**
  * JENKINS INTEGRATION
  */
-// require('./services/jenkins');
+require('./services/jenkins');
 
 /**
  * SONARQUBE INTEGRATION
