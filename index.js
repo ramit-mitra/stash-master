@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-// const server = require('node-git-server');
 const favicon = require('express-favicon');
 const app = express();
 const indexRouter = require('./routes/index');
@@ -18,7 +17,6 @@ global.stashDir = 'git-stash';
 // LOAD USERs & REPOSITORY PERMISSION DATA
 global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
 global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
-
 
 /* WELCOME MESSAGE */
 console.log('WELCOME TO STASH MASTER');

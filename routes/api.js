@@ -94,6 +94,34 @@ router.get('/get-users', function (req, res) {
     res.json(global.users);
 });
 
+// fetch user password
+router.get('/get-user-password/:username', function (req, res) {
+    let username = req.params.username;
+    for (let i in global.users.active) {
+        if (global.users.active[i].username == username) {
+            res.json(global.users.active[i].password);
+        }
+    }
+    //fallback
+    res.status(404);
+    res.end();
+});
+
+// update user password
+router.post('/set-user-password', function (req, res) {
+    let resdata = req.body.data;
+    for (let i in global.users.active) {
+        if (global.users.active[i].username == resdata.username) {
+            global.users.active[i].password = resdata.newpwd;
+            fs.writeFile('./app-data/users.json', JSON.stringify(global.users));
+            res.status(200);
+        } else {
+            res.status(404);
+        }
+    }
+    res.end();
+});
+
 // get console output for a running service
 router.get('/get-output/:service', function (req, res) {
     let service = req.params.service;
