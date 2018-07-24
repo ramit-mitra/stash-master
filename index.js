@@ -13,7 +13,7 @@ const apiRouter = require('./routes/api');
  */
 global.gitPort = process.env.GITPORT || 5055;
 global.appPort = process.env.APPPORT || 2323;
-global.stashDir = 'git-stash';
+global.stashDir = path.join(__dirname, 'git-stash');
 // LOAD USERs & REPOSITORY PERMISSION DATA
 global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
 global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
@@ -65,7 +65,7 @@ require('./services/stash');
 /**
  * JENKINS INTEGRATION
  */
-require('./services/jenkins');
+// require('./services/jenkins');
 
 /**
  * SONARQUBE INTEGRATION

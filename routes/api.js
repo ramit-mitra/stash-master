@@ -61,7 +61,10 @@ router.get('/delete-user/:username', function (req, res) {
 
 // delete repository action
 router.post('/delete', function (req, res) {
-    rimraf('./' + global.stashDir + '/' + req.body.data + '.git', function () {
+    // rimraf('./' + global.stashDir + '/' + req.body.data + '.git', function () {
+    //     console.log('Removed git repository :: ' + req.body.data + '.git');
+    // });
+    rimraf(global.stashDir + '/' + req.body.data + '.git', function () {
         console.log('Removed git repository :: ' + req.body.data + '.git');
     });
 

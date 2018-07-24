@@ -6,7 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Stash content
-git-stash/
+# git-stash/
 
 # Console output files
 console_output/

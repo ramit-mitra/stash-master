@@ -6,11 +6,7 @@ const server = require('node-git-server');
 /**
  *  GIT STASH
  */
-// LOAD USERs & REPOSITORY PERMISSION DATA
-global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
-global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
-
-const repos = new server(path.resolve(__dirname, stashDir), {
+const repos = new server(global.stashDir, {
     autoCreate: true,
     authenticate: (type, repo, user, next) => {
         if (type == 'push') {
