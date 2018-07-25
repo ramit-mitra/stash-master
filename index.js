@@ -24,11 +24,11 @@ console.log('An integrated GIT STASH + Jenkins system to power your devops neces
 console.log('THE FOLLOWING SERVICES ARE UP & RUNNING ::');
 
 /**
- *  WEBFRONT APP
+ *  STASH MASTER APP
  */
 app.listen(appPort);
 app.use(favicon(__dirname + '/public/favicon.png'));
-console.log(`WEBFRONT running at http://localhost:${appPort}`);
+console.log(`STASH MASTER running at http://localhost:${appPort}`);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
