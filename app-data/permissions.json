@@ -1,4 +1,1 @@
-{
-    "nodejs-training-demo": [],
-    "sample-symfony-app": []
-}
+{"sample-symfony-app":[{"username":"jenkins","readP":true,"writeP":true},{"username":"ramit","readP":true,"writeP":true}]}

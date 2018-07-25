@@ -56,8 +56,6 @@ block content
       .modal-content
         .modal-header
           h5.modal-title Manage User Access
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') ×
         .modal-body
           .container-fluid
             .row
@@ -74,16 +72,18 @@ block content
               .form-group.col-12(ng-repeat='user in permstack.users.active')
                 .row
                   .col-4
-                    label.font-weight-bold(for='username') {{ user.username }}
+                    label.font-weight-bold(ng-model="updatedpermstack[$index][0]", for='username') {{ user.username }}
+                    input(type="hidden", ng-init="usrs[$index] = user.username")
                   .col-4
                     .form-check.form-check-inline
-                        input#inlineCheckbox1.form-check-input(type='checkbox', value='read')
-                        label.form-check-label(for='inlineCheckbox1') Read (R)
+                      input#inlineCheckbox1.form-check-input(ng-model="readP[$index]", type='checkbox', value='read')
+                      label.form-check-label(for='inlineCheckbox1') Read (R)
                   .col-4
-                      .form-check.form-check-inline
-                        input#inlineCheckbox2.form-check-input(type='checkbox', value='write')
-                        label.form-check-label(for='inlineCheckbox2') Write (W)
+                    .form-check.form-check-inline
+                      input#inlineCheckbox2.form-check-input(ng-model="writeP[$index]", type='checkbox', value='write')
+                      label.form-check-label(for='inlineCheckbox2') Write (W)
               br
         .modal-footer
-          button.btn.btn-success(type='button') Save
+          button.btn.btn-warning(ng-click="submitUserRepoMgmnt(permstack.reponame)", type='button', data-dismiss="modal") Save
+          button.btn.btn-secondary(type='button', data-dismiss="modal") Close
 

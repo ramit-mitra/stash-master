@@ -76,8 +76,6 @@ router.post('/delete', function (req, res) {
 router.get('/get-user-repo-perm/:reponame', function (req, res) {
     let reponame = req.params.reponame;
 
-    console.log(reponame)
-
     if (!global.permissions.hasOwnProperty(reponame)) {
         //if there is no existing entry for this repo in permission DS, add a blank key
         //and save to file
@@ -88,8 +86,21 @@ router.get('/get-user-repo-perm/:reponame', function (req, res) {
     res.json({
         permissions: global.permissions.reponame,
         users: global.users,
-        perms: ['R', 'W']
+        perms: ['R', 'W'],
+        reponame: reponame
     });
+});
+
+// update user repository permission details
+router.post('/set-user-repo-perm', function (req, res) {
+    let reponame = req.body.reponame;
+    let perms = JSON.parse(req.body.perms);
+
+    global.permissions[reponame] = perms;
+    fs.writeFile('./app-data/permissions.json', JSON.stringify(global.permissions));
+
+    res.status(200);
+    res.end();
 });
 
 // fetch user list

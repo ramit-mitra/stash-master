@@ -6,6 +6,10 @@ app.controller('default', function ($scope, $http, $interval) {
     $scope.stashlist = [];
     $scope.host;
     $scope.permstack = {};
+    // for manage user feature
+    $scope.usrs = [];
+    $scope.readP = [];
+    $scope.writeP = [];
 
     $scope.getRepoDetails = function () {
         $http.get('/api/get-repo-details').then(function (res) {
@@ -29,7 +33,29 @@ app.controller('default', function ($scope, $http, $interval) {
     $scope.userRepoMgmnt = function (reponame) {
         // fetch user vs repo permissions
         $http.get('/api/get-user-repo-perm/' + reponame).then(function (response) {
+            $scope.usrs = [];
+            $scope.readP = [];
+            $scope.writeP = [];
             $scope.permstack = response.data;
+        });
+    }
+
+    $scope.submitUserRepoMgmnt = function (reponame) {
+        // purify the user choices
+        let perms = [];
+        for (let i in $scope.usrs) {
+            let item = {};
+            item.username = $scope.usrs[i];
+            item.readP = $scope.readP[i] ? true : false;
+            item.writeP = $scope.writeP[i] ? true : false;
+            perms.push(item);
+        }
+        // invoke save via API
+        $http.post('/api/set-user-repo-perm', {
+            reponame: reponame,
+            perms: JSON.stringify(perms)
+        }).then(function (res) {
+            bootbox.alert("Repository user access updated !");
         });
     }
 
