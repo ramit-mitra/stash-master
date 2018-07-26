@@ -25,34 +25,19 @@ block navbar
           a.nav-link(ng-click="showAbout()", href='#') About
 
 block content
-  .container(ng-init="init('" + reponame + "')")
+  .container-fluid(ng-init="init('" + reponame + "')")
     .row
       .col-12.text-center
         br
-        .alert.alert-primary User Overview
-        .btn-group(role='group', aria-label='Repository Actions')
-          button.btn.btn-success(ng-click="addUser()", type='button') Add New User
+        .alert.alert-success
+          h3=reponame
+      .col-12    
+        form
+          .form-row
+            .col-2.text-center(ng-init="getRepositoryDetails()")
+              select.form-control
+                option(ng-repeat="branch in repodetails.branches") {{branch}}
     .row
       .col-12.text-center
-        br        
-    .row
-      .col-12
-        table.table.text-center
-          thead
-              tr
-                  th(scope='col') #
-                  th(scope='col') Username
-                  th(scope='col') Status
-                  th(scope='col') Role
-                  th(scope='col') Adminster
-          tbody(ng-repeat="item in users.active")
-              tr
-                  th(scope='row') {{ $index + 1 }}
-                  td {{item.username}}
-                  td {{item.status ? 'active' : 'inactive'}}
-                  td {{item.role}}
-                  td 
-                    .btn-group(role='group', aria-label='Repository Actions')
-                      button.btn.btn-info(ng-click="updatePassword(item.username)", type='button') Update Stash Password
-                      button.btn.btn-danger(ng-click="deleteUser(item.username)", type='button') Delete User
+        br
 

@@ -17,13 +17,21 @@ router.get('/get-repository-details/:reponame', function (req, res) {
     let reponame = req.params.reponame;
     let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
 
+    // find the branches available for the repository
     let bch = [];
     let branches = shell.exec(headCmd + "git branch -a").stdout;
     branches = branches.split("\n");
     for (let i in branches) {
-        bch.push(((branches[i].replace("*", "")).trim()))
+        let str = ((branches[i].replace("*", "")).trim());
+        if (str != "")
+            bch.push(str)
     }
-    console.log(bch)
+
+    //
+
+    res.json({
+        branches: bch
+    });
 });
 
 module.exports = router;
