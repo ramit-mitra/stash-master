@@ -30,13 +30,18 @@ block content
       .col-12.text-center
         br
         .alert.alert-warning Repository Overview
+  .container-fluid
     .row(ng-init="getRepoDetails()")
       .col-4(ng-repeat="item in stashlist")
         .card
           .card-body.text-center
             h5.card-title {{item}}
             hr
-            h6.card-subtitle.mb-2.text-muted git clone http://{{host}}/{{item}}.git
+            p.card-text Clone this repository,
+            h6.card-subtitle.mb-2.text-muted 
+              kbd git clone http://{{host}}/{{item}}.git
+            br
+            a.card-link(href="/repository-dashboard/{{item}}") Goto Repository Dashboard
           .card-footer.text-center.bg-dark
             .btn-group(role='group', aria-label='Repository Actions')
               button.btn.btn-success(ng-click="userRepoMgmnt(item)", type='button', data-toggle="modal", data-target="#manageusrperm") Manage UA

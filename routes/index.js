@@ -23,5 +23,16 @@ router.get('/manage-users', function (req, res, next) {
     ngController: 'manageusers'
   });
 });
+/* GET repository overview page */
+router.get('/repository-dashboard/:reponame', function (req, res, next) {
+  let reponame = req.params.reponame;
+
+  res.render('repository-dashboard', {
+    title: 'Stash Master // Repository Dashboard - ' + reponame,
+    reponame: reponame,
+    ngApp: 'home',
+    ngController: 'repodashboard'
+  });
+});
 
 module.exports = router;

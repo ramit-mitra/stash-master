@@ -3,8 +3,6 @@ FROM node:8.11-alpine
 WORKDIR /usr/src/stash-master
 COPY . . 
 
-RUN npm install && \
-    npm install -g nodemon localtunnel
+RUN npm install
 
-# CMD nodemon index.js --https
-CMD node index.js
+CMD node index.js --https

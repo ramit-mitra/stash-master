@@ -185,3 +185,19 @@ app.controller('svcintgn', function ($scope, $http, $interval) {
     // scheduling tasks
     $interval($scope.getJenkinsOutput, 5555);
 });
+
+/** Repository Dashboard Integration App */
+app.controller('repodashboard', function ($scope, $http, $interval) {
+    $scope.init = function (reponame) {
+        $scope.reponame = reponame;
+    }
+
+    $scope.getRepositoryDetails = function () {
+        $http.get('/rapi/get-repository-details/' + $scope.reponame).then(function (res) {
+            $scope.repodetails = res.data;
+        });
+    }
+
+    // scheduling tasks
+    $interval($scope.getRepositoryDetails, 5555);
+});

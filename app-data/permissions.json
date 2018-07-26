@@ -1,1 +1,11 @@
-{"sample-symfony-app":[{"username":"jenkins","readP":true,"writeP":true},{"username":"ramit","readP":true,"writeP":true}]}
+{
+    "sample-symfony-app": [{
+        "username": "jenkins",
+        "readP": true,
+        "writeP": true
+    }, {
+        "username": "ramit",
+        "readP": true,
+        "writeP": true
+    }]
+}

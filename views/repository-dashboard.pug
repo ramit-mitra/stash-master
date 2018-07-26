@@ -1,0 +1,58 @@
+extends layout
+
+block navbar
+  nav.navbar.navbar-expand-lg.navbar-light.bg-white
+    a.navbar-brand(href='/') 
+      img(src="https://png.icons8.com/color/48/000000/yoda.png")
+      |   Stash Master
+    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.mr-auto
+        li.nav-item
+          a.nav-link(href='/home')
+            | Home
+        li.nav-item.active
+          a.nav-link(href='/manage-users') User Management 
+            span.sr-only (current)
+        li.nav-item.dropdown 
+          a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') 
+            | Jenkins 
+          .dropdown-menu(aria-labelledby='navbarDropdown') 
+            a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status 
+            a.dropdown-item(href='#') Goto Jenkins 
+        li.nav-item
+          a.nav-link(ng-click="showAbout()", href='#') About
+
+block content
+  .container(ng-init="init('" + reponame + "')")
+    .row
+      .col-12.text-center
+        br
+        .alert.alert-primary User Overview
+        .btn-group(role='group', aria-label='Repository Actions')
+          button.btn.btn-success(ng-click="addUser()", type='button') Add New User
+    .row
+      .col-12.text-center
+        br        
+    .row
+      .col-12
+        table.table.text-center
+          thead
+              tr
+                  th(scope='col') #
+                  th(scope='col') Username
+                  th(scope='col') Status
+                  th(scope='col') Role
+                  th(scope='col') Adminster
+          tbody(ng-repeat="item in users.active")
+              tr
+                  th(scope='row') {{ $index + 1 }}
+                  td {{item.username}}
+                  td {{item.status ? 'active' : 'inactive'}}
+                  td {{item.role}}
+                  td 
+                    .btn-group(role='group', aria-label='Repository Actions')
+                      button.btn.btn-info(ng-click="updatePassword(item.username)", type='button') Update Stash Password
+                      button.btn.btn-danger(ng-click="deleteUser(item.username)", type='button') Delete User
+
