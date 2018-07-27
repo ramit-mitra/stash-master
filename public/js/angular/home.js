@@ -187,7 +187,11 @@ app.controller('svcintgn', function ($scope, $http, $interval) {
 });
 
 /** Repository Dashboard Integration App */
-app.controller('repodashboard', function ($scope, $http, $interval) {
+app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
+
+    $scope.repohistory = [$sce.trustAsHtml('<br><div class="text-center"><i class="fa fa-spin fa-spinner fa-4x"></i></div><br>')];
+    $scope.selectedBranch = '';
+
     $scope.init = function (reponame) {
         $scope.reponame = reponame;
     }
@@ -196,6 +200,51 @@ app.controller('repodashboard', function ($scope, $http, $interval) {
         $http.get('/rapi/get-repository-details/' + $scope.reponame).then(function (res) {
             $scope.repodetails = res.data;
         });
+    }
+
+    $scope.createNewBranch = function () {
+        bootbox.prompt({
+            size: "small",
+            title: "Create a branch",
+            onEscape: true,
+            closeButton: false,
+            callback: function (result) {
+                if (result) {
+                    $http.get("/rapi/create-branch/" + $scope.reponame + "/" + result).then(
+                        function () {
+                            bootbox.alert("Branch <kbd>" + result + "</kbd> created");
+                        }
+                    );
+                }
+            }
+        });
+    }
+
+    $scope.fetchView = function (branchname) {
+        $http.get('/rapi/get-commit-history/' + $scope.reponame + '/' + branchname).then(function (res) {
+            if (res.status = 200 || res.status == 304) {
+                $scope.repohistory = [];
+                for (x in res.data.data) {
+                    $scope.repohistory.push($sce.trustAsHtml(res.data.data[x]));
+                }
+            }
+        });
+    }
+
+    $scope.getPRDiff = function () {
+        if ($scope.prfrom && $scope.prto) {
+            $scope.prdiff = 'Fetching changes between branches...';
+            $http.get('/rapi/get-pr-diff/' + $scope.reponame + '/' + $scope.prfrom + '/' + $scope.prto).then(function (res) {
+                if (res.status = 200 || res.status == 304) {
+                    $scope.prdiff = $sce.trustAsHtml(res.data);
+                    console.log(res.data)
+                    // for (x in res.data.data) {
+                    //     $scope.prdiff.push($sce.trustAsHtml(res.data.data[x]));
+                    // }
+                }
+            });
+        }
+
     }
 
     // scheduling tasks

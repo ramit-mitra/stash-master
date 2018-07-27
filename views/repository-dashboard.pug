@@ -12,7 +12,7 @@ block navbar
         li.nav-item
           a.nav-link(href='/home')
             | Home
-        li.nav-item.active
+        li.nav-item
           a.nav-link(href='/manage-users') User Management 
             span.sr-only (current)
         li.nav-item.dropdown 
@@ -33,11 +33,75 @@ block content
           h3=reponame
       .col-12    
         form
-          .form-row
-            .col-2.text-center(ng-init="getRepositoryDetails()")
-              select.form-control
-                option(ng-repeat="branch in repodetails.branches") {{branch}}
+          .form-row.alert.alert-info
+            .col-2(ng-init="getRepositoryDetails()")
+              label.mr-sm-2.text-left 
+                i.fa.fa-code-fork(aria-hidden="true")  
+                | &nbsp; Branch &nbsp;  
+              button.btn.btn-outline-dark.btn-sm.pull-right(ng-click="createNewBranch()")
+                i.fa.fa-plus(aria-hidden="true")
+                | &nbsp; New Branch
+              select.form-control.text-center(ng-model="selectedBranch", ng-change="fetchView(selectedBranch)", ng-options="branch for branch in repodetails.branches")
+            .col-2.text-center
+              label.mr-sm-2
+                i.fa.fa-check-square-o(aria-hidden="true")  
+                | &nbsp; {{repodetails.ccount}} Commits &nbsp;  
+              br
+              label.mr-sm-2
+                i.fa.fa-check-square-o(aria-hidden="true")  
+                | &nbsp; {{repodetails.branches.length}} Branches &nbsp;  
+            .col-2
+            .col-2
+            .col-2
+            .col-2
+              button.btn.btn-outline-dark.btn-sm.pull-right(data-toggle="modal", data-target="#newPRModal", ng-click="newPR()") New pull request
+              br
+              label.mr-sm-2.pull-right(style="padding-top: 10px;")
+                i.fa.fa-bullhorn(aria-hidden="true")  
+                | &nbsp; 0 Open pull request
+  .container-fluid
     .row
-      .col-12.text-center
-        br
+      //- left sidebar
+      .col-6.text-center
+        //- Page load default card
+        .card.border-warning(ng-hide="selectedBranch != ''")
+          .card-body
+            h5.card-title.font-weight-light Choose a branch to view commit history
+        //- Commit history card
+        .card.border-warning(ng-show="selectedBranch != ''")
+          .card-body
+            h5.card-title Commit History for 
+              kbd {{selectedBranch}}
+            hr
+            p.card.border-dark.card-text.text-left(style="padding-left: 20px;", ng-repeat="item in repohistory", ng-bind-html="item")
+            hr        
+      //- right sidebar
+      .col-6.text-center
+        //- Page load default card
+        .card.border-warning(ng-hide="selectedBranch != ''")
+          .card-body
+            h5.card-title.font-weight-light Your PRs will be listed here
+  .container-fluid
+    .row
+      .col-12
+  //- New PR modal
+  #newPRModal.modal.fade.bd-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+          h5#exampleModalLabel.modal-title Compare changes 
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          p.font-weight-light Choose different branches below to discuss and review changes.
+            form.form-inline
+              label.mr-sm-4(for='inlineFormInputName2') From
+              select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prfrom", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
+              i.fa.fa-arrow-right.mr-sm-4(aria-hidden='true')
+              label.mr-sm-2(for='inlineFormInputGroupUsername2') To
+              select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prto", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
+          p(ng-bind-html="prdiff")
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='button') Save changes
 

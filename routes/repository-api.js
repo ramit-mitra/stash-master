@@ -27,10 +27,76 @@ router.get('/get-repository-details/:reponame', function (req, res) {
             bch.push(str)
     }
 
-    //
+    // total commits
+    let ccount = shell.exec("git rev-list --all --count").stdout;
 
     res.json({
-        branches: bch
+        branches: bch,
+        ccount: ccount
+    });
+});
+// create new branch
+router.get('/create-branch/:reponame/:branchname', function (req, res) {
+    let reponame = req.params.reponame;
+    let branchname = req.params.branchname;
+
+    let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
+
+    // create branch
+    shell.exec(headCmd + "git branch -c " + branchname).stdout;
+
+    res.status(200);
+    res.end();
+});
+// get commit history for a branch
+router.get('/get-commit-history/:reponame/:branchname', function (req, res) {
+    let reponame = req.params.reponame;
+    let branchname = req.params.branchname;
+
+    let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
+
+    // fetch custom formatted commit history
+    let history = shell.exec(headCmd + 'git log --format="*#*%ncommit %H%nAuthor: %aN <%ae>%nDate: %ad%nComitted approx %ar%n%nCommit title: %s%nDetails: %b%n%N" ' + branchname).stdout;
+    history = history.split('*#*');
+
+    let historyL = [];
+    for (let i in history) {
+        let str = ((history[i].replace(/\n/g, "<br>")).trim());
+        if (str != "")
+            historyL.push(str)
+    }
+
+    console.log(historyL);
+
+    res.json({
+        data: historyL
+    });
+});
+// get pr diff between two branches
+router.get('/get-pr-diff/:reponame/:prfrom/:prto', function (req, res) {
+    let reponame = req.params.reponame;
+    let prfrom = req.params.prfrom;
+    let prto = req.params.prto;
+
+    let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
+
+    // fetch pr diff between branches
+    let diff = shell.exec(headCmd + 'git diff --minimal ' + prfrom + ' ' + prto).stdout;
+    // let diff = ((shell.exec(headCmd + 'git diff --minimal ' + prfrom + ' ' + prto).stdout).replace(/\n/g, "<br>")).trim();
+
+    // history = history.split('*#*');
+
+    // let historyL = [];
+    // for (let i in history) {
+    //     let str = ((history[i].replace(/\n/g, "<br>")).trim());
+    //     if (str != "")
+    //         historyL.push(str)
+    // }
+
+    // console.log(historyL);
+
+    res.json({
+        data: convert.toHtml(diff)
     });
 });
 
