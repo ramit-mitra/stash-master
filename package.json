@@ -2,6 +2,7 @@
   "name": "stashmaster",
   "version": "1.0.0",
   "description": "Create Repository. Manage User Access. Simplified.",
+  "repository": "https://github.com/ramit-mitra/stash-master",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
