@@ -17,6 +17,7 @@ global.stashDir = path.join(__dirname, 'git-stash');
 // LOAD USERs & REPOSITORY PERMISSION DATA
 global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
 global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
+global.prs = JSON.parse(fs.readFileSync('./app-data/pr.json'));
 
 /**
  * STASH MASTER INTEGRATION

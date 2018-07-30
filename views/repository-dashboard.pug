@@ -58,7 +58,7 @@ block content
               br
               label.mr-sm-2.pull-right(style="padding-top: 10px;")
                 i.fa.fa-bullhorn(aria-hidden="true")  
-                | &nbsp; 0 Open pull request
+                | &nbsp; {{prlist.cprs}} Open pull request
   .container-fluid
     .row
       //- left sidebar
@@ -78,15 +78,36 @@ block content
       //- right sidebar
       .col-6.text-center
         //- Page load default card
-        .card.border-warning(ng-hide="selectedBranch != ''")
+        .card.border-warning(ng-hide="prlist.cprs > 0")
           .card-body
             h5.card-title.font-weight-light Your PRs will be listed here
+        //- Page load default card
+        .card.border-warning(ng-show="prlist.cprs > 0")
+          .card-body(ng-init="getPRs()")
+            h5.card-title Open PR's
+            br
+            table.table
+              thead
+                tr
+                  th(scope='col') #
+                  th(scope='col') From/To Branches
+                  th(scope='col') Date Submitted
+                  th(scope='col') 
+              tbody
+                tr(ng-repeat="pr in prlist.prs")
+                  th(scope='row') {{$index+1}}
+                  td {{pr.prfrom}} --> {{pr.prto}}
+                  td {{pr.date}}
+                  td.btn-group 
+                    button.btn.btn-success(type="button", ng-click="approvePR(pr.token)") Approve and merge
+                    button.btn.btn-danger(type="button", ng-click="discardPR(pr.token)") Discard
+            hr
   .container-fluid
     .row
       .col-12
   //- New PR modal
-  #newPRModal.modal.fade.bd-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
-    .modal-dialog.modal-lg(role='document')
+  #newPRModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document', style='max-width: 90% !important;')
       .modal-content
         .modal-header
           h5#exampleModalLabel.modal-title Compare changes 
@@ -98,10 +119,9 @@ block content
               label.mr-sm-4(for='inlineFormInputName2') From
               select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prfrom", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
               i.fa.fa-arrow-right.mr-sm-4(aria-hidden='true')
-              label.mr-sm-2(for='inlineFormInputGroupUsername2') To
+              label.mr-sm-4(for='inlineFormInputGroupUsername2') To
               select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prto", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
-          p(ng-bind-html="prdiff")
-        .modal-footer
-          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='button') Save changes
+              button.btn.btn-success.mr-sm-4.pull-right(ng-show="prcreatebtn", ng-click='raisePR()', type='button', data-dismiss='modal') Create pull request
+          p.border.border-warning(style="padding: 10px;", ng-bind-html="prdiff")
+          
 

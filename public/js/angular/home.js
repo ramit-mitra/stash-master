@@ -190,6 +190,7 @@ app.controller('svcintgn', function ($scope, $http, $interval) {
 app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
 
     $scope.repohistory = [$sce.trustAsHtml('<br><div class="text-center"><i class="fa fa-spin fa-spinner fa-4x"></i></div><br>')];
+    $scope.prdiff = $sce.trustAsHtml('<br>');
     $scope.selectedBranch = '';
 
     $scope.init = function (reponame) {
@@ -199,6 +200,12 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     $scope.getRepositoryDetails = function () {
         $http.get('/rapi/get-repository-details/' + $scope.reponame).then(function (res) {
             $scope.repodetails = res.data;
+        });
+    }
+
+    $scope.getPRs = function () {
+        $http.get('/rapi/get-prs/' + $scope.reponame).then(function (res) {
+            $scope.prlist = res.data;
         });
     }
 
@@ -232,21 +239,32 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     }
 
     $scope.getPRDiff = function () {
+        $scope.prcreatebtn = false;
         if ($scope.prfrom && $scope.prto) {
-            $scope.prdiff = 'Fetching changes between branches...';
+            $scope.prdiff = $sce.trustAsHtml('<br><p class="text-center"><i class="fa fa-spin fa-spinner fa-2x"></i><br>Fetching changes between branches...</p>');
             $http.get('/rapi/get-pr-diff/' + $scope.reponame + '/' + $scope.prfrom + '/' + $scope.prto).then(function (res) {
                 if (res.status = 200 || res.status == 304) {
-                    $scope.prdiff = $sce.trustAsHtml(res.data);
-                    console.log(res.data)
-                    // for (x in res.data.data) {
-                    //     $scope.prdiff.push($sce.trustAsHtml(res.data.data[x]));
-                    // }
+                    $scope.prdiff = $sce.trustAsHtml(res.data.data);
+                    $scope.prcreatebtn = true;
                 }
             });
         }
+    }
 
+    $scope.raisePR = function () {
+        if ($scope.prfrom && $scope.prto) {
+            $http.post('/rapi/raise-pr', {
+                reponame: $scope.reponame,
+                prfrom: $scope.prfrom,
+                prto: $scope.prto
+            }).then(function (res) {
+                if (res.status == 200)
+                    bootbox.alert("New PR created !");
+            });
+        }
     }
 
     // scheduling tasks
     $interval($scope.getRepositoryDetails, 5555);
+    $interval($scope.getPRs, 5555);
 });
