@@ -107,6 +107,7 @@ router.get('/get-pr-diff/:reponame/:prfrom/:prto', function (req, res) {
         data: convert.toHtml(diff)
     });
 });
+
 // create a new PR
 router.post('/raise-pr', function (req, res) {
     let reponame = req.body.reponame;
@@ -125,6 +126,52 @@ router.post('/raise-pr', function (req, res) {
         date: dateFormat(now),
         token: randomstring.generate()
     });
+    fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
+
+    res.status(200);
+    res.end();
+});
+
+// approve PR
+router.get('/approve-pr/:reponame/:token', function (req, res) {
+    let reponame = req.params.reponame;
+    let token = req.params.token;
+
+    // //merge action
+    // let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
+
+    // // fetch pr diff between branches
+    // let diff = shell.exec(headCmd + 'git diff --minimal ' + prfrom + ' ' + prto).stdout;
+    // diff = (diff.replace(/\n/g, "<br>")).trim();
+
+    // // remove pr from stack
+    // let prset = [];
+    // for (i in global.prs[reponame]) {
+    //     if (global.prs[reponame][i].token != token) {
+    //         prset.push(global.prs[reponame][i]);
+    //     }
+    // }
+    // // finally
+    // global.prs[reponame] = prset;
+    // fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
+
+    res.status(200);
+    res.end();
+});
+
+// delete PR
+router.get('/discard-pr/:reponame/:token', function (req, res) {
+    let reponame = req.params.reponame;
+    let token = req.params.token;
+
+    let prset = [];
+    for (i in global.prs[reponame]) {
+        if (global.prs[reponame][i].token != token) {
+            prset.push(global.prs[reponame][i]);
+        }
+    }
+    // finally
+    global.prs[reponame] = prset;
     fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
 
     res.status(200);

@@ -264,6 +264,22 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         }
     }
 
+    $scope.approvePR = function (token) {
+        $http.get('/rapi/approve-pr/' + $scope.reponame + '/' + token).then(function (res) {
+            if (res.status = 200 || res.status == 304) {
+                bootbox.alert("PR approved and merged to taget branch !");
+            }
+        });
+    }
+
+    $scope.discardPR = function (token) {
+        $http.get('/rapi/discard-pr/' + $scope.reponame + '/' + token).then(function (res) {
+            if (res.status = 200 || res.status == 304) {
+                bootbox.alert("PR discarded !");
+            }
+        });
+    }
+
     // scheduling tasks
     $interval($scope.getRepositoryDetails, 5555);
     $interval($scope.getPRs, 5555);
