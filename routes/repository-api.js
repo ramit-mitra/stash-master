@@ -183,18 +183,19 @@ router.get('/approve-pr/:reponame/:token', function (req, res) {
                 shell.exec(cmd, function (code, stdout, stderr) {
                     // 6. delete the clonned directory 
                     shell.exec('rm -rf ' + targetdir);
-                    if (!code)
+                    if (!code) {
                         res.status(200);
-                    else
+                        // finally
+                        global.prs[reponame] = prset;
+                        fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
+                    } else {
                         res.status(500);
+                    }
                     res.end();
                 });
             });
         }
     }
-    // finally
-    global.prs[reponame] = prset;
-    fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
 });
 
 // delete PR

@@ -1,8 +1,9 @@
+# Author : Ramit Mitra
+# Copyright : [Ramit]Mitra, 2018
+# License : MIT
+# About : Containerised CI/CD with a dedicated GIT server, user management and jenkins.
 FROM node:8.11-alpine
-
 WORKDIR /usr/src/stash-master
-COPY . . 
-
+COPY . .
 RUN npm install
-
-CMD node index.js --https
+CMD npm run launch

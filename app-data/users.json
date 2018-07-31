@@ -1,1 +1,15 @@
-{"active":[{"username":"jenkins","password":"jenkins","role":"developer","status":1},{"username":"ramit","password":"12345","role":"developer","status":1}],"inactive":[],"deleted":[{"username":"avishek","password":"12345","role":"developer","status":0}]}
+{
+    "active": [{
+        "username": "jenkins",
+        "password": "jenkins",
+        "role": "developer",
+        "status": 1
+    }, {
+        "username": "ramit",
+        "password": "12345",
+        "role": "developer",
+        "status": 1
+    }],
+    "inactive": [],
+    "deleted": []
+}

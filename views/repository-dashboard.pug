@@ -59,6 +59,11 @@ block content
               label.mr-sm-2.pull-right(style="padding-top: 10px;")
                 i.fa.fa-bullhorn(aria-hidden="true")  
                 | &nbsp; {{prlist.cprs}} Open pull request
+  //- pr merge in progress alert
+  .container-fluid(ng-show="prmwip.length != 0")
+    .row
+      .col-12
+        .alert.alert-warning(role='alert', ng-bind-html='prmwip')
   .container-fluid
     .row
       //- left sidebar

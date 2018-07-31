@@ -192,6 +192,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     $scope.repohistory = [$sce.trustAsHtml('<br><div class="text-center"><i class="fa fa-spin fa-spinner fa-4x"></i></div><br>')];
     $scope.prdiff = $sce.trustAsHtml('<br>');
     $scope.selectedBranch = '';
+    $scope.prmwip = '';
 
     $scope.init = function (reponame) {
         $scope.reponame = reponame;
@@ -265,6 +266,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     }
 
     $scope.approvePR = function (token) {
+        $scope.prmwip = $sce.trustAsHtml('<br><p class="text-center"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><br><br>Your PR is being merged, please wait...</p>');
         $http.get('/rapi/approve-pr/' + $scope.reponame + '/' + token).then(function (res) {
             if (res.status = 200 || res.status == 304) {
                 bootbox.alert("PR approved and merged to taget branch !");
