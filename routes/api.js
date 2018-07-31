@@ -3,13 +3,6 @@ const rimraf = require('rimraf');
 const fs = require('fs');
 var router = express.Router();
 
-// if (process.env.mode === 'docker') {
-//     var cache = require('express-redis-cache')({
-//         host: 'redis',
-//         port: 6379
-//     });
-// }
-
 /* API routes */
 // get repository details
 router.get('/get-repo-details', function (req, res, next) {

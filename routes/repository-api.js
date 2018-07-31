@@ -13,6 +13,11 @@ if (!shell.which('git')) {
     shell.exit(1);
 }
 
+/* GLOBAL VARIABLES */
+// CREATING A SU USER AND PASSWORD TO PERFORM SU OPERATIONS ON REPOSITORY
+global.masterusr = randomstring.generate();
+global.masterpwd = randomstring.generate();
+
 /* Repository Dashboard API routes */
 // get repository details
 router.get('/get-repository-details/:reponame', function (req, res) {
@@ -136,27 +141,60 @@ router.post('/raise-pr', function (req, res) {
 router.get('/approve-pr/:reponame/:token', function (req, res) {
     let reponame = req.params.reponame;
     let token = req.params.token;
+    let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
 
-    // //merge action
-    // let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
+    // merge branches and remove PR from actionable list
+    let prset = [];
+    for (i in global.prs[reponame]) {
+        if (global.prs[reponame][i].token != token) {
+            prset.push(global.prs[reponame][i]);
+        } else {
+            // merge branches task and things get complex here since merge cannot be performed on remote
+            // 1. checkout the code to a temporary dir
+            let re = new RegExp(global.appPort, "g");
+            let host = req.headers.host.replace(re, global.gitPort);
+            let prto = global.prs[reponame][i].prto;
+            let prfrom = global.prs[reponame][i].prfrom;
 
-    // // fetch pr diff between branches
-    // let diff = shell.exec(headCmd + 'git diff --minimal ' + prfrom + ' ' + prto).stdout;
-    // diff = (diff.replace(/\n/g, "<br>")).trim();
+            // 2. validate if working in http/https
+            let cmd = 'git clone ';
+            if (req.secure)
+                cmd += 'https://';
+            else
+                cmd += 'http://';
+            // TODO dynamic system username and password
+            let targetdir = './temp/' + reponame;
+            cmd += global.masterusr + ':' + global.masterpwd + '@' + host + '/' + reponame + '.git ' + targetdir;
 
-    // // remove pr from stack
-    // let prset = [];
-    // for (i in global.prs[reponame]) {
-    //     if (global.prs[reponame][i].token != token) {
-    //         prset.push(global.prs[reponame][i]);
-    //     }
-    // }
-    // // finally
-    // global.prs[reponame] = prset;
-    // fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
+            // 3. check if the temp directory exists, else create directory
+            if (!shell.test('-d', './temp/')) {
+                shell.mkdir('./temp/');
+            }
 
-    res.status(200);
-    res.end();
+            // 4. checkout code to temp directory
+            shell.exec(cmd, function (code, stdout, stderr) {
+                // 5. perform merge operation
+                cmd = 'cd ' + targetdir + ' && ';
+                cmd += 'git checkout ' + prfrom + ' && ';
+                cmd += 'git checkout ' + prto + ' && ';
+                cmd += 'git pull && ';
+                cmd += 'git merge ' + prfrom + ' && ';
+                cmd += 'git push'
+                shell.exec(cmd, function (code, stdout, stderr) {
+                    // 6. delete the clonned directory 
+                    shell.exec('rm -rf ' + targetdir);
+                    if (!code)
+                        res.status(200);
+                    else
+                        res.status(500);
+                    res.end();
+                });
+            });
+        }
+    }
+    // finally
+    global.prs[reponame] = prset;
+    fs.writeFile('./app-data/pr.json', JSON.stringify(global.prs));
 });
 
 // delete PR

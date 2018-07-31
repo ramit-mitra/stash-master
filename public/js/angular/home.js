@@ -268,6 +268,8 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         $http.get('/rapi/approve-pr/' + $scope.reponame + '/' + token).then(function (res) {
             if (res.status = 200 || res.status == 304) {
                 bootbox.alert("PR approved and merged to taget branch !");
+            } else {
+                bootbox.alert("PR merge failed !!!");
             }
         });
     }

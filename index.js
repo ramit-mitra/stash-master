@@ -39,9 +39,4 @@ require('./services/jenkins');
  */
 // require('./services/sonarqube');
 
-/**
- * JEDI INTEGRATION
- */
-require('./jedi/index').init(9090, global.stashDir);
-
 module.exports = {};
