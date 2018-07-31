@@ -9,8 +9,8 @@ services:
       - "80:2323"
       - "5055:5055"
       - "8080:8080"
-    env_file:
-    - docker.env
+    # env_file:
+    # - docker.env
     deploy:
       replicas: 2
       update_config:
