@@ -45,6 +45,8 @@ block content
             .btn-group(role='group', aria-label='Repository Actions')
               button.btn.btn-success(ng-click="userRepoMgmnt(item)", type='button', data-toggle="modal", data-target="#manageusrperm") Manage UA
               button.btn.btn-danger(ng-click="deleteRepo(item)", type='button') Delete Repository
+  .container
+    .row
       .col-12.text-center(ng-if="stashlist.length == 0")
         .alert.alert-primary.font-weight-bold 
           br
