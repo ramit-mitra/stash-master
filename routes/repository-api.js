@@ -229,4 +229,14 @@ router.get('/discard-pr/:reponame/:token', function (req, res) {
     res.end();
 });
 
+// fetch git hooks
+router.get('/fetch-webhooks/:reponame', function (req, res) {
+    let reponame = req.params.reponame;
+
+    //TODO
+
+    res.status(200);
+    res.end();
+});
+
 module.exports = router;

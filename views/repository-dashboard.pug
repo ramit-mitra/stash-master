@@ -19,7 +19,7 @@ block navbar
           a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') 
             | Jenkins 
           .dropdown-menu(aria-labelledby='navbarDropdown') 
-            a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status
+            a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status  
         li.nav-item
           a.nav-link(ng-click="showAbout()", href='#') About
 
@@ -52,6 +52,7 @@ block content
             .col-2
             .col-2
             .col-2
+              button.btn.btn-outline-dark.btn-sm.pull-right(data-toggle="modal", data-target="#webhookModal", ng-click="fetchWebhooks()") Webhook Configuration
             .col-2
               button.btn.btn-outline-dark.btn-sm.pull-right(data-toggle="modal", data-target="#newPRModal", ng-click="newPR()") New pull request
               br
@@ -127,5 +128,29 @@ block content
               select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prto", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
               button.btn.btn-success.mr-sm-4.pull-right(ng-show="prcreatebtn", ng-click='raisePR()', type='button', data-dismiss='modal') Create pull request
           p.border.border-warning(style="padding: 10px;", ng-bind-html="prdiff")
+  //- Webhook modal
+  #webhookModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document', style='max-width: 90% !important;')
+      //- loading quilljs
+      script(src='https://cdn.quilljs.com/1.3.6/quill.js')
+      link(defer, rel='stylesheet', href='https://cdn.quilljs.com/1.3.6/quill.snow.css')
+      .modal-content
+        .modal-header
+          h5#exampleModalLabel.modal-title Webhook customization 
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          p.font-weight-light Webhooks provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization. Webhooks can be triggered whenever a variety of actions are performed on a repository or an organization.
+            form.form-inline
+              label.mr-sm-4(for='inlineFormInputName2') Choose git hook to modify
+              select#inlineFormInputName2.form-control.mr-sm-4
+          #editor.container-fluid
+          script.
+            var quill = new Quill('#editor', {
+              modules: {
+                toolbar: false
+              },
+              theme: 'snow'
+            });
           
 

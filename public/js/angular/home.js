@@ -304,6 +304,14 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         });
     }
 
+    $scope.fetchWebhooks = function () {
+        $http.get('/rapi/fetch-webhooks/' + $scope.reponame).then(function (res) {
+            if (res.status = 200 || res.status == 304) {
+                bootbox.alert("Hooks fetched !!!");
+            }
+        });
+    }
+
     // scheduling tasks
     $interval($scope.getRepositoryDetails, 5555);
     $interval($scope.getPRs, 5555);
