@@ -13,6 +13,13 @@ const repos = new server(global.stashDir, {
             //push to server operation
             if (type == 'push') {
                 user((username, password) => {
+                    //SU can create repositories
+                    //validate if SU and create repository
+                    if (global.masterusr == username && global.masterusr == password) {
+                        //SU authorised
+                        return resolve();
+                    }
+                    //else if not SU...
                     //check if permission data exists
                     if (!global.permissions.hasOwnProperty(repo)) {
                         //if there is no existing entry for this repo in permission DS, add a blank key

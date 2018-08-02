@@ -18,6 +18,26 @@ app.controller('default', function ($scope, $http, $interval) {
         });
     }
 
+    $scope.createNewRepository = function () {
+        bootbox.prompt({
+            size: "medium",
+            title: "Name your repository",
+            inputType: "text",
+            onEscape: true,
+            backdrop: true,
+            closeButton: false,
+            callback: function (result) {
+                if (result.length) {
+                    $http.get('/rapi/create-repository/' + result).then(function (res) {
+                        if (res.status != 500) {
+                            bootbox.alert("<h3 class='font-weight-light text-center'>Your empty git repository has been created</h3><br><h4 class='font-weight-bold'>What's next ?</h4><p class='text-primary'> <i class='fa fa-bullseye' aria-hidden='true'></i> Add/Remove user and password from the User Management page <br><i class='fa fa-bullseye' aria-hidden='true'></i> Use the button 'Manage UA' to provide user access to this repository <br><i class='fa fa-bullseye' aria-hidden='true'></i> Clone the repository to your system using the clone URL provided on the repository card <br></p>");
+                        }
+                    });
+                }
+            }
+        })
+    }
+
     $scope.deleteRepo = function (reponame) {
         bootbox.confirm("<h4 class='text-danger'>Are you sure ?</h4><br><p class='text-dark font-weight-bold'>THIS ACTION CANNOT BE UNDONE AND WILL PERMANENTLY REMOVE THE GIT REPOSITORY FROM STASH</p>", function (result) {
             if (result) {

@@ -29,6 +29,13 @@ block content
       .col-12.text-center
         br
         .alert.alert-warning Repository Overview
+    .row
+      .col-12.text-center
+        .btn-group(role='group', aria-label='Repository Actions')
+          button.btn.btn-outline-success(ng-click="createNewRepository()", type='button') 
+            i.fa.fa-plus(aria-hidden="true") &nbsp;
+            |  Create Repository
+    br
   .container-fluid
     .row(ng-init="getRepoDetails()")
       .col-4(ng-repeat="item in stashlist")
@@ -75,18 +82,18 @@ block content
                 br
           .container-fluid
             form.text-center.row
-              .form-group.col-12(ng-repeat='user in permstack.users.active')
+              .form-group.col-12(ng-repeat='user in permstack.pmap')
                 .row
                   .col-4
                     label.font-weight-bold(ng-model="updatedpermstack[$index][0]", for='username') {{ user.username }}
                     input(type="hidden", ng-init="usrs[$index] = user.username")
                   .col-4
                     .form-check.form-check-inline
-                      input#inlineCheckbox1.form-check-input(ng-model="readP[$index]", type='checkbox', value='read')
+                      input#inlineCheckbox1.form-check-input(ng-model="readP[$index]", type='checkbox', value='read', ng-checked="user.readP")
                       label.form-check-label(for='inlineCheckbox1') Read (R)
                   .col-4
                     .form-check.form-check-inline
-                      input#inlineCheckbox2.form-check-input(ng-model="writeP[$index]", type='checkbox', value='write')
+                      input#inlineCheckbox2.form-check-input(ng-model="writeP[$index]", type='checkbox', value='write', ng-checked="user.writeP")
                       label.form-check-label(for='inlineCheckbox2') Write (W)
               br
         .modal-footer

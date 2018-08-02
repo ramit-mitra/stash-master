@@ -1,5 +1,4 @@
 const express = require('express');
-const rimraf = require('rimraf');
 const shell = require('shelljs');
 const Convert = require('ansi-to-html');
 const fs = require('fs');
@@ -19,6 +18,20 @@ global.masterusr = randomstring.generate();
 global.masterpwd = randomstring.generate();
 
 /* Repository Dashboard API routes */
+//create blank repository
+router.get('/create-repository/:reponame', function (req, res) {
+    let reponame = req.params.reponame;
+    let cmd = "cd " + global.stashDir + " && git init --bare " + reponame + ".git";
+    shell.exec(cmd, function (code, stdout, stderr) {
+        if (!code) {
+            res.status(200);
+        } else {
+            res.status(500);
+        }
+        res.end();
+    });
+});
+
 // get repository details
 router.get('/get-repository-details/:reponame', function (req, res) {
     let reponame = req.params.reponame;
@@ -35,7 +48,7 @@ router.get('/get-repository-details/:reponame', function (req, res) {
     }
 
     // total commits
-    let ccount = shell.exec("git rev-list --all --count").stdout;
+    let ccount = shell.exec(headCmd + " git rev-list --all --count").stdout;
 
     res.json({
         branches: bch,
@@ -162,7 +175,6 @@ router.get('/approve-pr/:reponame/:token', function (req, res) {
                 cmd += 'https://';
             else
                 cmd += 'http://';
-            // TODO dynamic system username and password
             let targetdir = './temp/' + reponame;
             cmd += global.masterusr + ':' + global.masterpwd + '@' + host + '/' + reponame + '.git ' + targetdir;
 

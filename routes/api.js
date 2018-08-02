@@ -80,10 +80,23 @@ router.get('/get-user-repo-perm/:reponame', function (req, res) {
         fs.writeFile('./app-data/permissions.json', JSON.stringify(global.permissions));
     }
 
+    let pmap = [];
+    //map active users vs permissions
+    for (x in global.users.active) {
+        temp = global.users.active[x];
+        writePF = false;
+        readPF = false;
+        for (y in global.permissions[reponame]) {
+            if (global.users.active[x].username == global.permissions[reponame][y].username) {
+                temp.readP = global.permissions[reponame][y].readP;
+                temp.writeP = global.permissions[reponame][y].writeP;
+            }
+        }
+        pmap.push(temp);
+    }
+
     res.json({
-        permissions: global.permissions.reponame,
-        users: global.users,
-        perms: ['R', 'W'],
+        pmap: pmap,
         reponame: reponame
     });
 });
