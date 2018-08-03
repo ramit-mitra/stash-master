@@ -213,6 +213,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     $scope.prdiff = $sce.trustAsHtml('<br>');
     $scope.selectedBranch = '';
     $scope.prmwip = '';
+    $scope.webhooks = '';
 
     $scope.init = function (reponame) {
         $scope.reponame = reponame;
@@ -289,8 +290,10 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         $scope.prmwip = $sce.trustAsHtml('<br><p class="text-center"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><br><br>Your PR is being merged, please wait...</p>');
         $http.get('/rapi/approve-pr/' + $scope.reponame + '/' + token).then(function (res) {
             if (res.status = 200 || res.status == 304) {
+                $scope.prmwip = '';
                 bootbox.alert("PR approved and merged to taget branch !");
             } else {
+                $scope.prmwip = '';
                 bootbox.alert("PR merge failed !!!");
             }
         });
@@ -305,9 +308,9 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     }
 
     $scope.fetchWebhooks = function () {
-        $http.get('/rapi/fetch-webhooks/' + $scope.reponame).then(function (res) {
+        $http.get('/rapi/fetch-sample-webhooks/' + $scope.reponame).then(function (res) {
             if (res.status = 200 || res.status == 304) {
-                bootbox.alert("Hooks fetched !!!");
+                $scope.webhooks = res.data.files;
             }
         });
     }

@@ -15,7 +15,7 @@ const repos = new server(global.stashDir, {
                 user((username, password) => {
                     //SU can create repositories
                     //validate if SU and create repository
-                    if (global.masterusr == username && global.masterusr == password) {
+                    if (global.masterusr == username && global.masterpwd == password) {
                         //SU authorised
                         return resolve();
                     }
@@ -48,8 +48,15 @@ const repos = new server(global.stashDir, {
                     }
                 });
             } else if (type == 'fetch') {
-                //clone & pull operation
                 user((username, password) => {
+                    //SU can fetch repositories
+                    //validate if SU and fetch repository
+                    if (global.masterusr == username && global.masterpwd == password) {
+                        //SU authorised
+                        return resolve();
+                    }
+                    //else if not SU...
+                    //clone & pull operation
                     //check if permission data exists
                     if (!global.permissions.hasOwnProperty(repo)) {
                         //if there is no existing entry for this repo in permission DS, add a blank key

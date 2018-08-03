@@ -2,6 +2,7 @@ const express = require('express');
 const shell = require('shelljs');
 const Convert = require('ansi-to-html');
 const fs = require('fs');
+const path = require('path');
 const randomstring = require('randomstring');
 const dateFormat = require('dateformat');
 var router = express.Router();
@@ -11,11 +12,6 @@ if (!shell.which('git')) {
     shell.echo('Sorry, this script requires GIT to be installed');
     shell.exit(1);
 }
-
-/* GLOBAL VARIABLES */
-// CREATING A SU USER AND PASSWORD TO PERFORM SU OPERATIONS ON REPOSITORY
-global.masterusr = randomstring.generate();
-global.masterpwd = randomstring.generate();
 
 /* Repository Dashboard API routes */
 //create blank repository
@@ -137,6 +133,7 @@ router.post('/raise-pr', function (req, res) {
         // create a key with reponame to hold PRs
         global.prs[reponame] = [];
     }
+
     // create new pr
     global.prs[reponame].push({
         prfrom: prfrom,
@@ -229,14 +226,25 @@ router.get('/discard-pr/:reponame/:token', function (req, res) {
     res.end();
 });
 
-// fetch git hooks
-router.get('/fetch-webhooks/:reponame', function (req, res) {
+// fetch git sample hooks
+router.get('/fetch-sample-webhooks/:reponame', function (req, res) {
     let reponame = req.params.reponame;
+    let hookpath = global.stashDir + '/' + reponame + '.git/hooks/';
+    let files = fs.readdirSync(hookpath);
+    let filelist = [];
+    for (var i in files) {
+        if (path.extname(files[i]) == '.sample') {
+            let tcontent = fs.readFileSync(hookpath + files[i], 'utf8');
+            filelist.push({
+                filename: files[i],
+                content: tcontent
+            })
+        }
+    }
 
-    //TODO
-
-    res.status(200);
-    res.end();
+    res.json({
+        files: filelist
+    });
 });
 
 module.exports = router;

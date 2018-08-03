@@ -142,8 +142,13 @@ block content
         .modal-body
           p.font-weight-light Webhooks provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization. Webhooks can be triggered whenever a variety of actions are performed on a repository or an organization.
             form.form-inline
+              button.btn.btn-outline-primary.pull-left(type="button") 
+                i.fa.fa-plus(aria-hidden="true")
+                | &nbsp; Add a hook
+              label.mr-sm-4(for='inlineFormInputName2') &nbsp;
               label.mr-sm-4(for='inlineFormInputName2') Choose git hook to modify
-              select#inlineFormInputName2.form-control.mr-sm-4
+              //- select#inlineFormInputName2.form-control.mr-sm-4.pull-right(ng-model="selectedSampleWebhook", ng-options="file for file in webhooks.filename")
+              select#inlineFormInputName2.form-control.mr-sm-4.pull-right(ng-model="selectedSampleWebhook", ng-change="getPRDiff()", ng-options="item.filename for item in webhooks")
           #editor.container-fluid
           script.
             var quill = new Quill('#editor', {
@@ -152,5 +157,3 @@ block content
               },
               theme: 'snow'
             });
-          
-
