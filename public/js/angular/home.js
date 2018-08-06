@@ -214,6 +214,8 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     $scope.selectedBranch = '';
     $scope.prmwip = '';
     $scope.webhooks = '';
+    //store the hookname being created for tracking
+    $scope.hookname = '';
 
     $scope.init = function (reponame) {
         $scope.reponame = reponame;
@@ -312,6 +314,64 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
             if (res.status = 200 || res.status == 304) {
                 $scope.webhooks = res.data.files;
             }
+        });
+    }
+
+    $scope.loadSampleWebhookData = function () {
+        if ($scope.selectedSampleWebhook.filename) {
+            $scope.webhookcontent = $scope.selectedSampleWebhook.content;
+            //since you're cloning the content, you need to save it as a different hook, hence name is blank
+            $scope.hookname = '';
+        }
+    }
+
+    $scope.createNewHook = function () {
+        bootbox.prompt({
+            closeButton: false,
+            size: "medium",
+            title: "Name new webhook as",
+            callback: function (result) {
+                if (result) {
+                    $scope.hookname = result;
+                    $http.get('/rapi/create-webhook/' + $scope.reponame + '/' + result).then(function (res) {
+                        if (res.status == 500) {
+                            bootbox.alert('Cannot create file, possibly this file already exists, please review and try again later !!!');
+                        } else {
+                            $scope.webhookcontent = res.data.data;
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    $scope.saveWebhookContent = function () {
+        if ($scope.hookname.length > 0) {
+            //filename is missing, hence ask user to provide it
+            bootbox.prompt({
+                closeButton: false,
+                size: "medium",
+                title: "Name new webhook as",
+                callback: function (result) {
+                    if (result) {
+                        $scope.hookname = result;
+                        $http.get('/rapi/create-webhook/' + $scope.reponame + '/' + result).then(function (res) {
+                            if (res.status == 500) {
+                                bootbox.alert('Cannot create file, possibly this file already exists, please review and try again later !!!');
+                            }
+                        });
+                    }
+                }
+            });
+            //hook created, good to proceed saving
+        }
+        //then...
+        $http.post('/rapi/save-webhook', {
+            reponame: $scope.reponame,
+            hookname: $scope.hookname,
+            content: $scope.webhookcontent
+        }).then(function (res) {
+            bootbox.alert("Webhook saved !");
         });
     }
 

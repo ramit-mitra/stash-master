@@ -247,4 +247,45 @@ router.get('/fetch-sample-webhooks/:reponame', function (req, res) {
     });
 });
 
+// create new webhook
+router.get('/create-webhook/:reponame/:hook', function (req, res) {
+    let reponame = req.params.reponame;
+    let hook = req.params.hook;
+    let hookpath = global.stashDir + '/' + reponame + '.git/hooks/';
+    if (!fs.existsSync(hookpath + hook)) {
+        // create file
+        fs.appendFile(hookpath + hook, '#!/bin/sh', function (err) {
+            if (err) {
+                res.status(500);
+                res.end();
+            } else {
+                res.json({
+                    data: '#!/bin/sh'
+                });
+            }
+        });
+    } else {
+        res.status(500);
+        res.end();
+    }
+});
+
+//create webhook
+router.post('/save-webhook', function (req, res) {
+    let reponame = req.body.reponame;
+    let hook = req.body.hookname;
+    let content = req.body.content;
+    let hookpath = global.stashDir + '/' + reponame + '.git/hooks/';
+
+    if (fs.existsSync(hookpath + hook)) {
+        fs.writeFile(hookpath + hook, content, function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+    }
+
+    res.status(200);
+    res.end();
+});
+
 module.exports = router;
