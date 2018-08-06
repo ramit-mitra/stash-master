@@ -346,7 +346,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     }
 
     $scope.saveWebhookContent = function () {
-        if ($scope.hookname.length > 0) {
+        if (!$scope.hookname.length > 0) {
             //filename is missing, hence ask user to provide it
             bootbox.prompt({
                 closeButton: false,
@@ -358,21 +358,31 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                         $http.get('/rapi/create-webhook/' + $scope.reponame + '/' + result).then(function (res) {
                             if (res.status == 500) {
                                 bootbox.alert('Cannot create file, possibly this file already exists, please review and try again later !!!');
+                            } else {
+                                //finally...
+                                $http.post('/rapi/save-webhook', {
+                                    reponame: $scope.reponame,
+                                    hookname: $scope.hookname,
+                                    content: $scope.webhookcontent
+                                }).then(function (res) {
+                                    bootbox.alert("Webhook saved !");
+                                });
                             }
                         });
                     }
                 }
             });
             //hook created, good to proceed saving
+        } else {
+            //then...
+            $http.post('/rapi/save-webhook', {
+                reponame: $scope.reponame,
+                hookname: $scope.hookname,
+                content: $scope.webhookcontent
+            }).then(function (res) {
+                bootbox.alert("Webhook saved !");
+            });
         }
-        //then...
-        $http.post('/rapi/save-webhook', {
-            reponame: $scope.reponame,
-            hookname: $scope.hookname,
-            content: $scope.webhookcontent
-        }).then(function (res) {
-            bootbox.alert("Webhook saved !");
-        });
     }
 
     // scheduling tasks
