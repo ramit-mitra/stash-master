@@ -1,2 +1,1 @@
-# stash-master
-Just another fancy POC !
+# stash-master  
