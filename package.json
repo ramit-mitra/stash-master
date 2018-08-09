@@ -23,6 +23,7 @@
     "pug": "^2.0.3",
     "randomstring": "^1.1.5",
     "rimraf": "^2.6.2",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "socket.io": "^2.1.1"
   }
 }
