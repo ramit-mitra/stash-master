@@ -1,15 +1,1 @@
-{
-    "active": [{
-        "username": "ramit",
-        "password": "12345",
-        "role": "developer",
-        "status": 1
-    }, {
-        "username": "jenkins",
-        "password": "jenkins",
-        "role": "developer",
-        "status": 1
-    }],
-    "inactive": [],
-    "deleted": []
-}
+{"active":[{"username":"ramit","password":"12345","role":"developer","status":1},{"username":"jenkins","password":null,"role":"developer","status":1}],"inactive":[],"deleted":[{"username":"sex","password":"sex","role":"developer","status":0},{"username":"moew","password":"meow","role":"developer","status":0},{"username":"baal","password":"baal","role":"developer","status":0}]}
