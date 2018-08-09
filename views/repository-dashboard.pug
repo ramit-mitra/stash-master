@@ -130,7 +130,7 @@ block content
               label.mr-sm-4(for='inlineFormInputGroupUsername2') To
               select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prto", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
               button.btn.btn-success.mr-sm-4.pull-right(ng-show="prcreatebtn", ng-click='raisePR()', type='button', data-dismiss='modal') Create pull request
-          p.border.border-warning(style="padding: 10px;", ng-bind-html="prdiff")
+          p.border.border-warning(style="padding: 10px;", ng-show="prcreatebtn", ng-bind-html="prdiff")
   //- Webhook modal
   #webhookModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
     .modal-dialog.modal-lg(role='document', style='max-width: 90% !important;')

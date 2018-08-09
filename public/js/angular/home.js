@@ -148,20 +148,38 @@ app.controller('manageusers', function ($scope, $http, $interval) {
     $scope.updatePassword = function (username) {
         $http.get('/api/get-user-password/' + username).then(function (res) {
             let oldpwd = res.data;
-            bootbox.prompt("Enter existing password", function (result) {
-                if (result === oldpwd) {
-                    bootbox.prompt("Enter new password", function (result) {
-                        $http.post('/api/set-user-password', {
-                            data: {
-                                username: username,
-                                newpwd: result,
+            bootbox.prompt({
+                size: "medium",
+                inputType: "password",
+                title: "Enter existing password",
+                onEscape: true,
+                closeButton: false,
+                callback: function (result) {
+                    if (result === oldpwd) {
+                        bootbox.prompt({
+                            size: "medium",
+                            inputType: "password",
+                            title: "Enter new password",
+                            onEscape: true,
+                            closeButton: false,
+                            callback: function (result) {
+                                if (result.length > 0) {
+                                    $http.post('/api/set-user-password', {
+                                        data: {
+                                            username: username,
+                                            newpwd: result,
+                                        }
+                                    }).then(function (res) {
+                                        toastr.success("Password updated !");
+                                    });
+                                } else {
+                                    toastr.error("Password cannot be blank, please try again !");
+                                }
                             }
-                        }).then(function (res) {
-                            toastr.success("Password updated !");
                         });
-                    });
-                } else {
-                    toastr.error("The password you entered doesnot match the existing password, please try again later !");
+                    } else {
+                        toastr.error("The password you entered doesnot match the existing password, please try again later !");
+                    }
                 }
             });
         });
@@ -389,6 +407,16 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                 toastr.success("Webhook saved !");
             });
         }
+    }
+
+    $scope.showAbout = function () {
+        bootbox.dialog({
+            message: '<div class="container text-justify"> <div class="row"> <div class="col-12"> <h1 class="display-4">About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr> <h2 class="display-4">Credits</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr> <h2 class="display-4">Coded and Designed by</h2> <br><h4 class="font-weight-light"><img src="https://png.icons8.com/ios-glyphs/64/000000/source-code.png">&nbsp;&nbsp;Ramit Mitra, 2018</h4></div></div></div>',
+            onEscape: true,
+            backdrop: true,
+            closeButton: true,
+            size: 'large'
+        });
     }
 
     // scheduling tasks

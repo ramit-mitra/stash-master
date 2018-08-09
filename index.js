@@ -39,9 +39,4 @@ require('./services/stash');
  */
 require('./services/jenkins');
 
-/**
- * SONARQUBE INTEGRATION
- */
-// require('./services/sonarqube');
-
 module.exports = {};
