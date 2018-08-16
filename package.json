@@ -9,7 +9,7 @@
     "launch": "clear && node index.js --https"
   },
   "author": "Ramit Mitra",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
     "ansi-to-html": "^0.6.6",
     "body-parser": "^1.18.3",
