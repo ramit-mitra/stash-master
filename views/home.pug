@@ -99,11 +99,11 @@ block content
                     input(type="hidden", ng-init="usrs[$index] = user.username")
                   .col-4
                     .form-check.form-check-inline
-                      input#inlineCheckbox1.form-check-input(ng-model="readP[$index]", type='checkbox', value='read', ng-checked="user.readP")
+                      input#inlineCheckbox1.form-check-input(ng-model="readP[$index]", type='checkbox', value='read', ng-checked="user.readP", ng-init="readP[$index] = user.readP")
                       label.form-check-label(for='inlineCheckbox1') Read (R)
                   .col-4
                     .form-check.form-check-inline
-                      input#inlineCheckbox2.form-check-input(ng-model="writeP[$index]", type='checkbox', value='write', ng-checked="user.writeP")
+                      input#inlineCheckbox2.form-check-input(ng-model="writeP[$index]", type='checkbox', value='write', ng-checked="user.writeP", ng-init="writeP[$index] = user.writeP")
                       label.form-check-label(for='inlineCheckbox2') Write (W)
               br
         .modal-footer
