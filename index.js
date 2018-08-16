@@ -34,9 +34,4 @@ require('./services/stash-master');
  */
 require('./services/stash');
 
-/**
- * JENKINS INTEGRATION
- */
-require('./services/jenkins');
-
 module.exports = {};

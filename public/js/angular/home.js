@@ -199,32 +199,6 @@ app.controller('manageusers', function ($scope, $http, $interval) {
     $interval($scope.getUsers, 2323);
 });
 
-/** Service Integration App */
-app.controller('svcintgn', function ($scope, $http, $interval) {
-
-    $scope.message = '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>';
-
-    $scope.getJenkinsOutput = function () {
-        $http.get('/api/get-output/jenkins').then(function (res) {
-            $scope.message = res.data;
-        });
-    }
-
-    $scope.showJenkinsOutput = function () {
-        bootbox.dialog({
-            title: "Jenkins Console",
-            message: $scope.message + '<br>',
-            onEscape: true,
-            backdrop: true,
-            closeButton: false,
-            size: 'large'
-        });
-    }
-
-    // scheduling tasks
-    $interval($scope.getJenkinsOutput, 5555);
-});
-
 /** Repository Dashboard Integration App */
 app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
 
