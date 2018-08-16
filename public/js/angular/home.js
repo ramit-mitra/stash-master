@@ -31,6 +31,7 @@ app.controller('default', function ($scope, $http, $interval) {
                     $http.get('/rapi/create-repository/' + result).then(function (res) {
                         if (res.status != 500) {
                             bootbox.alert("<h3 class='font-weight-light text-center'>Your empty git repository has been created</h3><br><h4 class='font-weight-bold'>What's next ?</h4><p class='text-primary'> <i class='fa fa-bullseye' aria-hidden='true'></i> Add/Remove user and password from the User Management page <br><i class='fa fa-bullseye' aria-hidden='true'></i> Use the button 'Manage UA' to provide user access to this repository <br><i class='fa fa-bullseye' aria-hidden='true'></i> Clone the repository to your system using the clone URL provided on the repository card <br></p>");
+                            toastr.success("New repository added to stash");
                         }
                     });
                 }
@@ -44,7 +45,7 @@ app.controller('default', function ($scope, $http, $interval) {
                 $http.post('/api/delete', {
                     data: reponame
                 }).then(function (response) {
-                    bootbox.alert("GIT Repository <kbd>" + reponame + "</kbd> deleted");
+                    toastr.success("GIT Repository <kbd>" + reponame + "</kbd> deleted");
                 });
             }
         });
@@ -75,7 +76,7 @@ app.controller('default', function ($scope, $http, $interval) {
             reponame: reponame,
             perms: JSON.stringify(perms)
         }).then(function (res) {
-            bootbox.alert("Repository user access updated !");
+            toastr.success("Repository permissions updated");
         });
     }
 
@@ -119,13 +120,13 @@ app.controller('manageusers', function ($scope, $http, $interval) {
                         let username = $('#username').val().trim();
                         let password = $('#password').val().trim();
                         if (username.length == 0 || password.length == 0) {
-                            bootbox.alert('Enter valid username and password to create a new user.');
+                            toastr.error("Cannot create a user with empty username and/or, password !");
                         } else {
                             $http.post('/api/create-user', {
                                 username: username,
                                 password: password
                             }).then(function (res) {
-                                bootbox.alert('New user with username ' + username + ' added !');
+                                toastr.success('New user ' + username + ' added');
                             });
                         }
                     }
@@ -138,7 +139,7 @@ app.controller('manageusers', function ($scope, $http, $interval) {
         bootbox.confirm("<h4 class='text-danger'>Are you sure ?</h4><br><p class='text-dark font-weight-bold'>THIS ACTION CANNOT BE UNDONE AND WILL PERMANENTLY REMOVE THIS USER FROM STASH</p>", function (result) {
             if (result) {
                 $http.get('/api/delete-user/' + username).then(function (res) {
-                    bootbox.alert('User with username ' + username + ' deleted !');
+                    toastr.success('User with username ' + username + ' deleted !');
                 });
             }
         });
@@ -147,20 +148,38 @@ app.controller('manageusers', function ($scope, $http, $interval) {
     $scope.updatePassword = function (username) {
         $http.get('/api/get-user-password/' + username).then(function (res) {
             let oldpwd = res.data;
-            bootbox.prompt("Enter existing password", function (result) {
-                if (result === oldpwd) {
-                    bootbox.prompt("Enter new password", function (result) {
-                        $http.post('/api/set-user-password', {
-                            data: {
-                                username: username,
-                                newpwd: result,
+            bootbox.prompt({
+                size: "medium",
+                inputType: "password",
+                title: "Enter existing password",
+                onEscape: true,
+                closeButton: false,
+                callback: function (result) {
+                    if (result === oldpwd) {
+                        bootbox.prompt({
+                            size: "medium",
+                            inputType: "password",
+                            title: "Enter new password",
+                            onEscape: true,
+                            closeButton: false,
+                            callback: function (result) {
+                                if (result.length > 0) {
+                                    $http.post('/api/set-user-password', {
+                                        data: {
+                                            username: username,
+                                            newpwd: result,
+                                        }
+                                    }).then(function (res) {
+                                        toastr.success("Password updated !");
+                                    });
+                                } else {
+                                    toastr.error("Password cannot be blank, please try again !");
+                                }
                             }
-                        }).then(function (res) {
-                            bootbox.alert("Password updated !");
                         });
-                    });
-                } else {
-                    bootbox.alert("The password you entered doesnot match the existing password, please try again later !");
+                    } else {
+                        toastr.error("The password you entered doesnot match the existing password, please try again later !");
+                    }
                 }
             });
         });
@@ -219,6 +238,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
 
     $scope.init = function (reponame) {
         $scope.reponame = reponame;
+        toastr.success('Fetching repository details');
     }
 
     $scope.getRepositoryDetails = function () {
@@ -243,7 +263,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                 if (result) {
                     $http.get("/rapi/create-branch/" + $scope.reponame + "/" + result).then(
                         function () {
-                            bootbox.alert("Branch <kbd>" + result + "</kbd> created");
+                            toastr.success("Branch <kbd>" + result + "</kbd> created");
                         }
                     );
                 }
@@ -269,7 +289,11 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
             $http.get('/rapi/get-pr-diff/' + $scope.reponame + '/' + $scope.prfrom + '/' + $scope.prto).then(function (res) {
                 if (res.status = 200 || res.status == 304) {
                     $scope.prdiff = $sce.trustAsHtml(res.data.data);
-                    $scope.prcreatebtn = true;
+                    if ($scope.prdiff.length > 0) {
+                        $scope.prcreatebtn = true;
+                    } else {
+                        toastr.warning('Nothing to merge. Please try with a different set of branches.');
+                    }
                 }
             });
         }
@@ -283,7 +307,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                 prto: $scope.prto
             }).then(function (res) {
                 if (res.status == 200)
-                    bootbox.alert("New PR created !");
+                    toastr.success("New PR created");
             });
         }
     }
@@ -293,10 +317,10 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         $http.get('/rapi/approve-pr/' + $scope.reponame + '/' + token).then(function (res) {
             if (res.status = 200 || res.status == 304) {
                 $scope.prmwip = '';
-                bootbox.alert("PR approved and merged to taget branch !");
+                toastr.success("PR approved and merged to taget branch");
             } else {
                 $scope.prmwip = '';
-                bootbox.alert("PR merge failed !!!");
+                toastr.error("PR merge failed. Please try again later !");
             }
         });
     }
@@ -304,7 +328,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     $scope.discardPR = function (token) {
         $http.get('/rapi/discard-pr/' + $scope.reponame + '/' + token).then(function (res) {
             if (res.status = 200 || res.status == 304) {
-                bootbox.alert("PR discarded !");
+                toastr.success("PR discarded");
             }
         });
     }
@@ -335,7 +359,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                     $scope.hookname = result;
                     $http.get('/rapi/create-webhook/' + $scope.reponame + '/' + result).then(function (res) {
                         if (res.status == 500) {
-                            bootbox.alert('Cannot create file, possibly this file already exists, please review and try again later !!!');
+                            toastr.success('Cannot create file, possibly this file already exists, please review and try again later !!!');
                         } else {
                             $scope.webhookcontent = res.data.data;
                         }
@@ -357,7 +381,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                         $scope.hookname = result;
                         $http.get('/rapi/create-webhook/' + $scope.reponame + '/' + result).then(function (res) {
                             if (res.status == 500) {
-                                bootbox.alert('Cannot create file, possibly this file already exists, please review and try again later !!!');
+                                toastr.success('Cannot create file, possibly this file already exists, please review and try again later !!!');
                             } else {
                                 //finally...
                                 $http.post('/rapi/save-webhook', {
@@ -365,7 +389,7 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                                     hookname: $scope.hookname,
                                     content: $scope.webhookcontent
                                 }).then(function (res) {
-                                    bootbox.alert("Webhook saved !");
+                                    toastr.success("Webhook saved !");
                                 });
                             }
                         });
@@ -380,9 +404,19 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                 hookname: $scope.hookname,
                 content: $scope.webhookcontent
             }).then(function (res) {
-                bootbox.alert("Webhook saved !");
+                toastr.success("Webhook saved !");
             });
         }
+    }
+
+    $scope.showAbout = function () {
+        bootbox.dialog({
+            message: '<div class="container text-justify"> <div class="row"> <div class="col-12"> <h1 class="display-4">About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr> <h2 class="display-4">Credits</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr> <h2 class="display-4">Coded and Designed by</h2> <br><h4 class="font-weight-light"><img src="https://png.icons8.com/ios-glyphs/64/000000/source-code.png">&nbsp;&nbsp;Ramit Mitra, 2018</h4></div></div></div>',
+            onEscape: true,
+            backdrop: true,
+            closeButton: true,
+            size: 'large'
+        });
     }
 
     // scheduling tasks

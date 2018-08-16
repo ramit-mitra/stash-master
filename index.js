@@ -14,7 +14,7 @@ const randomstring = require('randomstring');
  */
 global.gitPort = process.env.GITPORT || 5055;
 global.appPort = process.env.APPPORT || 2323;
-global.stashDir = path.join(__dirname, 'git-stash');
+global.stashDir = process.env.STASHDIR || path.join(__dirname, 'git-stash');
 
 // LOAD USERs & REPOSITORY PERMISSION DATA
 global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
@@ -38,10 +38,5 @@ require('./services/stash');
  * JENKINS INTEGRATION
  */
 require('./services/jenkins');
-
-/**
- * SONARQUBE INTEGRATION
- */
-// require('./services/sonarqube');
 
 module.exports = {};
