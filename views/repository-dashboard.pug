@@ -3,7 +3,7 @@ extends layout
 block navbar
   nav.navbar.navbar-expand-lg.navbar-light.bg-white
     a.navbar-brand(href='/') 
-      img(src="https://png.icons8.com/color/48/000000/yoda.png")
+      img(src="https://png.icons8.com/dusk/48/000000/product-documents.png")
       |   Stash Master
     button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
       span.navbar-toggler-icon
@@ -14,12 +14,7 @@ block navbar
             | Home
         li.nav-item
           a.nav-link(href='/manage-users') User Management 
-            span.sr-only (current)
-        li.nav-item.dropdown 
-          a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') 
-            | Jenkins 
-          .dropdown-menu(aria-labelledby='navbarDropdown') 
-            a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status  
+            span.sr-only (current)  
         li.nav-item
           a.nav-link(ng-click="showAbout()", href='#') About
 
@@ -110,6 +105,9 @@ block content
   .container-fluid
     .row
       .col-12
+        br
+        br
+        br
   //- New PR modal
   #newPRModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
     .modal-dialog.modal-lg(role='document', style='max-width: 90% !important;')
@@ -127,7 +125,7 @@ block content
               label.mr-sm-4(for='inlineFormInputGroupUsername2') To
               select#inlineFormInputName2.form-control.mr-sm-4(ng-model="prto", ng-change="getPRDiff()", ng-options="branch for branch in repodetails.branches")
               button.btn.btn-success.mr-sm-4.pull-right(ng-show="prcreatebtn", ng-click='raisePR()', type='button', data-dismiss='modal') Create pull request
-          p.border.border-warning(style="padding: 10px;", ng-bind-html="prdiff")
+          p.border.border-warning(style="padding: 10px;", ng-show="prcreatebtn", ng-bind-html="prdiff")
   //- Webhook modal
   #webhookModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
     .modal-dialog.modal-lg(role='document', style='max-width: 90% !important;')
@@ -139,8 +137,7 @@ block content
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          p.font-weight-light
-            Webhooks provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization. Webhooks can be triggered whenever a variety of actions are performed on a repository or an organization.
+          p.font-weight-light Webhooks provide a way for notifications to be delivered to an external web server whenever certain actions occur on a repository or organization. Webhooks can be triggered whenever a variety of actions are performed on a repository or an organization.
           form.form-inline
             button.btn.btn-outline-primary.pull-left(type="button", ng-click='createNewHook()') 
               i.fa.fa-plus(aria-hidden="true")

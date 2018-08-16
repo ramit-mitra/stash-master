@@ -9,7 +9,7 @@
     "launch": "clear && node index.js --https"
   },
   "author": "Ramit Mitra",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
     "ansi-to-html": "^0.6.6",
     "body-parser": "^1.18.3",
@@ -23,6 +23,7 @@
     "pug": "^2.0.3",
     "randomstring": "^1.1.5",
     "rimraf": "^2.6.2",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "socket.io": "^2.1.1"
   }
 }

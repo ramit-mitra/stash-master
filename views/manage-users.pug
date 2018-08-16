@@ -3,7 +3,7 @@ extends layout
 block navbar
   nav.navbar.navbar-expand-lg.navbar-light.bg-white
     a.navbar-brand(href='/') 
-      img(src="https://png.icons8.com/color/48/000000/yoda.png")
+      img(src="https://png.icons8.com/dusk/48/000000/product-documents.png")
       |   Stash Master
     button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
       span.navbar-toggler-icon
@@ -15,11 +15,6 @@ block navbar
         li.nav-item.active
           a.nav-link(href='/manage-users') User Management 
             span.sr-only (current)
-        li.nav-item.dropdown 
-          a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') 
-            | Jenkins 
-          .dropdown-menu(aria-labelledby='navbarDropdown') 
-            a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status
         li.nav-item
           a.nav-link(ng-click="showAbout()", href='#') About
 
@@ -30,7 +25,7 @@ block content
         br
         .alert.alert-primary User Overview
         .btn-group(role='group', aria-label='Repository Actions')
-          button.btn.btn-success(ng-click="addUser()", type='button') Add New User
+          button.btn.btn-outline-success(ng-click="addUser()", type='button', data-toggle="tooltip", data-placement="right", title="Add a new user to the system. Then you can go ahead and provide repository specific permission(s) for that user.") Add New User
     .row
       .col-12.text-center
         br        
@@ -52,8 +47,9 @@ block content
                   td {{item.role}}
                   td 
                     .btn-group(role='group', aria-label='Repository Actions')
-                      button.btn.btn-info(ng-click="updatePassword(item.username)", type='button') Update Stash Password
-                      button.btn.btn-danger(ng-click="deleteUser(item.username)", type='button') Delete User
+                      button.btn.btn-outline-info(ng-click="updatePassword(item.username)", type='button', data-toggle="tooltip", data-placement="left", title="Update user password") Update Stash Password
+                      button.btn.btn-outline-danger(ng-click="deleteUser(item.username)", type='button', data-toggle="tooltip", data-placement="right", title="Permanently removes this user from the system") Delete User
+        br
       .col-12.text-center(ng-if="users.active.length == 0")
         .alert.alert-secondary.font-weight-bold 
           br
