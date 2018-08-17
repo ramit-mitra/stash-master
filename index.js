@@ -16,6 +16,9 @@ global.gitPort = process.env.GITPORT || 5055;
 global.appPort = process.env.APPPORT || 2323;
 global.stashDir = process.env.STASHDIR || path.join(__dirname, 'git-stash');
 
+// APP BOOT VALIDATIONS
+require('./validator/validator');
+
 // LOAD USERs & REPOSITORY PERMISSION DATA
 global.users = JSON.parse(fs.readFileSync('./app-data/users.json'));
 global.permissions = JSON.parse(fs.readFileSync('./app-data/permissions.json'));
