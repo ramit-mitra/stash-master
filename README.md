@@ -1,4 +1,6 @@
 # stash-master  
+[![Build Status](https://travis-ci.org/ramit-mitra/stash-master.svg?branch=master)](https://travis-ci.org/ramit-mitra/stash-master)   
+
 **StashMaster** allows you to create and host git repositories, create/manage users & access permission(s). This project has been designed with minimal dependencies and with an objective to be usable on multiple platforms(like, _local system, local/team server, cloud infrastructure and docker_).  
 
 **StashMaster** is free and open source software, written in NodeJS, and powered by ExpressJS, AngularJS, HTML5 & Bootstrap4.  
