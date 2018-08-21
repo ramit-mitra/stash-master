@@ -1,0 +1,10 @@
+# make use of vm's 
+sudo: 'required'
+
+# have the docker service set up (we'll
+# update it later)
+services:
+  - 'docker'
+language: node_js
+node_js:
+  - "8"
