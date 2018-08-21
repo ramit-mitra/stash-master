@@ -5,7 +5,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Stash content
+# Stash content and app data directories
+app-data/*
 git-stash/*
 
 # Console output files
