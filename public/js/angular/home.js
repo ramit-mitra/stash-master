@@ -285,11 +285,11 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     $scope.getPRDiff = function () {
         $scope.prcreatebtn = false;
         if ($scope.prfrom && $scope.prto) {
-            $scope.prdiff = $sce.trustAsHtml('<br><p class="text-center"><i class="fa fa-spin fa-spinner fa-2x"></i><br>Fetching changes between branches...</p>');
+            toastr.info('<p class="text-center"><i class="fa fa-spin fa-spinner fa-2x"></i><br>Fetching changes between branches</p>');
             $http.get('/rapi/get-pr-diff/' + $scope.reponame + '/' + $scope.prfrom + '/' + $scope.prto).then(function (res) {
                 if (res.status = 200 || res.status == 304) {
                     $scope.prdiff = $sce.trustAsHtml(res.data.data);
-                    if ($scope.prdiff.length > 0) {
+                    if (res.data.data.length > 0) {
                         $scope.prcreatebtn = true;
                     } else {
                         toastr.warning('Nothing to merge. Please try with a different set of branches.');

@@ -16,9 +16,12 @@ RUN openssl req \
     -out key.cert
 WORKDIR /usr/src/stash-master
 RUN git clone --single-branch -b vcs https://github.com/ramit-mitra/stash-master.git .
+# RUN git pull && \
+#     git gc --aggressive --prune=now && \
+#     git reflog expire --all --expire=now && \
+#     git gc --prune=now --aggressive
+# Trying to keep the image slim, hence removing the .git folder
 RUN git pull && \
-    git gc --aggressive --prune=now && \
-    git reflog expire --all --expire=now && \
-    git gc --prune=now --aggressive
+    rm -rf .git
 RUN npm install
 CMD npm run launch
