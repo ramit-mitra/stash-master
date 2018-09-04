@@ -30,12 +30,12 @@ global.masterpwd = randomstring.generate();
 /**
  * STASH MASTER INTEGRATION
  */
-require('./services/stash-master');
+var io = require('./services/stash-master').io;
 
 /**
  * GIT STASH INTEGRATION
  */
-require('./services/stash');
+require('./services/stash').init(io);
 
 /**
  * JENKINS INTEGRATION

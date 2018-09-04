@@ -4,39 +4,30 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const favicon = require('express-favicon');
-const app = express();
+const createError = require('http-errors');
 const indexRouter = require('../routes/index');
 const apiRouter = require('../routes/api');
 const repositoryApiRouter = require('../routes/repository-api');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+/**
+ *  SOCKET.IO INTEGRATION
+ */
+// an user is connected
+// io.on('connection', function (socket) {
+//     console.log('a user connected');
+// });
+
+http.listen(appPort, function () {
+    // do nothing!
+});
 
 /**
  *  STASH MASTER APP
  */
-
-
-/**
- *  SOCKET IO INTEGRATION
- *  WILL BE INCORPORATED IN NEXT MAJOR
- */
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
-// io.on('connection', function (socket) {
-//     console.log('a user connected');
-//     socket.on('disconnect', function () {
-//         console.log('user disconnected');
-//     });
-// });
-
-app.listen(appPort);
-app.use(favicon(__dirname + '/../public/favicon.png'));
-
-/* WELCOME MESSAGE */
-console.log('WELCOME TO STASH MASTER');
-console.log('An integrated GIT STASH + Jenkins system to power your devops.');
-console.log('THE FOLLOWING SERVICES ARE UP & RUNNING ::');
-console.log(`STASH MASTER running at http://localhost:${appPort}`);
-
-// view engine setup
+// favicon & view engine setup
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
@@ -48,6 +39,7 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(favicon(__dirname + '/../public/favicon.png'));
 
 // import router routes
 app.use('/', indexRouter);
@@ -59,6 +51,7 @@ app.use('/rapi/', repositoryApiRouter);
 app.use(function (req, res, next) {
     next(createError(404));
 });
+
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
@@ -69,4 +62,13 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-module.exports = app;
+/* WELCOME MESSAGE */
+console.log('WELCOME TO STASH MASTER');
+console.log('An integrated GIT STASH + Jenkins system to power your devops.');
+console.log('THE FOLLOWING SERVICES ARE UP & RUNNING ::');
+console.log(`STASH MASTER running at http://localhost:${appPort}`);
+
+module.exports = {
+    'app': app,
+    'io': io
+};

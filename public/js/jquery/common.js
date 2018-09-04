@@ -35,6 +35,14 @@ $('document').ready(function () {
     } else if (pathname == '/manage-users') { // for manage-users only
         toastr.success('Fetching active users');
     }
+
+    // socket.io integration
+    $(function () {
+        var socket = io();
+        socket.on('repoevents', function (msg) {
+            toastr.info(msg);
+        });
+    });
 });
 
 function cloneCommandCopied() {

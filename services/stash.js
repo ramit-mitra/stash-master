@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const server = require('node-git-server');
+var socketIO = null;
 
 /**
  *  GIT STASH
@@ -94,6 +95,9 @@ const repos = new server(global.stashDir, {
 /* EVENT HANDLERS */
 repos.on('push', (push) => {
     console.log(`push ${push.repo}/${push.commit} (${push.branch})`);
+    if (socketIO) {
+        socketIO.emit('repoevents', `An user pushed to <kbd>${push.branch}</kbd> branch of repository <kbd>${push.repo}</kbd>`);
+    }
     push.accept();
 });
 repos.on('fetch', (fetch) => {
@@ -105,4 +109,18 @@ repos.listen(gitPort, () => {
     console.log(`GIT SERVER running on http://localhost:${gitPort}`)
 });
 
-module.exports = {};
+module.exports = {
+    /* this init is used to integrate socket.io with stash events */
+    'init': function (io) {
+        /* Pushing realtime events */
+        let countUsers = 0;
+        // on connect log to console
+        io.on('connection', function (socket) {
+            socketIO = socket;
+            console.log('New user connected, total pool : ' + (++countUsers));
+            socket.on('disconnect', function () {
+                console.log('An user disconnected, total pool : ' + (--countUsers));
+            });
+        });
+    }
+};
