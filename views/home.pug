@@ -1,9 +1,9 @@
 extends layout
 
 block navbar
-  nav.navbar.navbar-expand-lg.navbar-light.bg-white
+  nav.animated.fadeInDownBig.navbar.navbar-expand-lg.navbar-light.bg-white
     a.navbar-brand(href='/') 
-      img(src="https://png.icons8.com/dusk/48/000000/product-documents.png")
+      img(src="https://png.icons8.com/color/48/000000/compare-git.png")
       |   Stash Master
     button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
       span.navbar-toggler-icon
@@ -21,7 +21,7 @@ block navbar
           .dropdown-menu(aria-labelledby='navbarDropdown')
             a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status
         li.nav-item
-          a.nav-link(ng-click="showAbout()", href='#') About
+          a.nav-link(ng-app="home", ng-controller="svcintgn", ng-click="showAbout()", href='#') About
 
 block content
   .container

@@ -1,9 +1,9 @@
 extends layout
 
 block navbar
-  nav.navbar.navbar-expand-lg.navbar-light.bg-white
+  nav.animated.fadeInDownBig.navbar.navbar-expand-lg.navbar-light.bg-white
     a.navbar-brand(href='/') 
-      img(src="https://png.icons8.com/dusk/48/000000/product-documents.png")
+      img(src="https://png.icons8.com/color/48/000000/compare-git.png")
       |   Stash Master
     button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
       span.navbar-toggler-icon
@@ -21,16 +21,16 @@ block navbar
           .dropdown-menu(aria-labelledby='navbarDropdown') 
             a.dropdown-item(href='#', ng-controller="svcintgn", ng-click="showJenkinsOutput()") Service Status  
         li.nav-item
-          a.nav-link(ng-click="showAbout()", href='#') About
+          a.nav-link(ng-app="home", ng-controller="svcintgn", ng-click="showAbout()", href='#') About
 
 block content
   .container-fluid(ng-init="init('" + reponame + "')")
     .row
-      .col-12.text-center
+      .col-12.text-center.animated.slideInLeft
         br
         .alert.alert-success
           h3=reponame
-      .col-12    
+      .col-12.animated.slideInRight
         form
           .form-row.alert.alert-info
             .col-2(ng-init="getRepositoryDetails()")
@@ -69,25 +69,25 @@ block content
       //- left sidebar
       .col-6.text-center
         //- Page load default card
-        .card.border-warning(ng-hide="selectedBranch != ''")
+        .card.card-custom-home.border-warning(ng-hide="selectedBranch != ''")
           .card-body
             h5.card-title.font-weight-light Choose a branch to view commit history
         //- Commit history card
-        .card.border-warning(ng-show="selectedBranch != ''")
+        .card.card-custom-home.border-warning(ng-show="selectedBranch != ''")
           .card-body
             h5.card-title Commit History for 
               kbd {{selectedBranch}}
             hr
-            p.card.border-dark.card-text.text-left(style="padding-left: 20px;", ng-repeat="item in repohistory", ng-bind-html="item")
+            p.card.card-custom-home.border-dark.card-text.text-left(style="padding-left: 20px;", ng-repeat="item in repohistory", ng-bind-html="item")
             hr        
       //- right sidebar
       .col-6.text-center
         //- Page load default card
-        .card.border-warning(ng-hide="prlist.cprs > 0")
+        .card.card-custom-home.border-warning(ng-hide="prlist.cprs > 0")
           .card-body
             h5.card-title.font-weight-light Your PRs will be listed here
         //- Page load default card
-        .card.border-warning(ng-show="prlist.cprs > 0")
+        .card.card-custom-home.border-warning(ng-show="prlist.cprs > 0")
           .card-body(ng-init="getPRs()")
             h5.card-title Open PR's
             br

@@ -80,16 +80,6 @@ app.controller('default', function ($scope, $http, $interval) {
         });
     }
 
-    $scope.showAbout = function () {
-        bootbox.dialog({
-            message: '<div class="container text-justify"> <div class="row"> <div class="col-12"> <h1 class="display-4">About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr> <h2 class="display-4">Credits</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr> <h2 class="display-4">Coded and Designed by</h2> <br><h4 class="font-weight-light">Ramit Mitra, 2018</h4> </div></div></div>',
-            onEscape: true,
-            backdrop: true,
-            closeButton: true,
-            size: 'large'
-        });
-    }
-
     // scheduling tasks
     $interval($scope.getRepoDetails, 2323);
 });
@@ -185,44 +175,8 @@ app.controller('manageusers', function ($scope, $http, $interval) {
         });
     }
 
-    $scope.showAbout = function () {
-        bootbox.dialog({
-            message: '<div class="container text-justify"> <div class="row"> <div class="col-12"> <h1 class="display-4">About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr> <h2 class="display-4">Credits</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr> <h2 class="display-4">Coded and Designed by</h2> <br><h4 class="font-weight-light"><img src="https://png.icons8.com/ios-glyphs/64/000000/source-code.png">&nbsp;&nbsp;Ramit Mitra, 2018</h4></div></div></div>',
-            onEscape: true,
-            backdrop: true,
-            closeButton: true,
-            size: 'large'
-        });
-    }
-
     // scheduling tasks
     $interval($scope.getUsers, 2323);
-});
-
-/** Service Integration App */
-app.controller('svcintgn', function ($scope, $http, $interval) {
-
-    $scope.message = '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>';
-
-    $scope.getJenkinsOutput = function () {
-        $http.get('/api/get-output/jenkins').then(function (res) {
-            $scope.message = res.data;
-        });
-    }
-
-    $scope.showJenkinsOutput = function () {
-        bootbox.dialog({
-            title: "Jenkins Console",
-            message: $scope.message + '<br>',
-            onEscape: true,
-            backdrop: true,
-            closeButton: false,
-            size: 'large'
-        });
-    }
-
-    // scheduling tasks
-    $interval($scope.getJenkinsOutput, 5555);
 });
 
 /** Repository Dashboard Integration App */
@@ -409,9 +363,36 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         }
     }
 
+    // scheduling tasks
+    $interval($scope.getRepositoryDetails, 5555);
+    $interval($scope.getPRs, 5555);
+});
+
+/** Service Integration App */
+app.controller('svcintgn', function ($scope, $http, $interval) {
+
+    $scope.message = '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading...</div>';
+
+    $scope.getJenkinsOutput = function () {
+        $http.get('/api/get-output/jenkins').then(function (res) {
+            $scope.message = res.data;
+        });
+    }
+
+    $scope.showJenkinsOutput = function () {
+        bootbox.dialog({
+            title: "Jenkins Console",
+            message: $scope.message + '<br>',
+            onEscape: true,
+            backdrop: true,
+            closeButton: false,
+            size: 'large'
+        });
+    }
+
     $scope.showAbout = function () {
         bootbox.dialog({
-            message: '<div class="container text-justify"> <div class="row"> <div class="col-12"> <h1 class="display-4">About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr> <h2 class="display-4">Credits</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr> <h2 class="display-4">Coded and Designed by</h2> <br><h4 class="font-weight-light"><img src="https://png.icons8.com/ios-glyphs/64/000000/source-code.png">&nbsp;&nbsp;Ramit Mitra, 2018</h4></div></div></div>',
+            message: '<div class="container text-justify"><div class="row"><div class="col-12"><h1 class="display-4"><img src="https://png.icons8.com/bubbles/100/000000/man-in-blue-jacket-information.png">&nbsp;About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr><h2 class="display-4"><img src="https://png.icons8.com/color/100/000000/creative-commons.png">&nbsp;Attribution</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr><h2 class="display-4"><img src="https://png.icons8.com/clouds/100/000000/design.png">&nbsp;Coded and Designed by</h2> <br><h4 class="font-weight-light">Ramit Mitra, 2018</h4></div></div></div>',
             onEscape: true,
             backdrop: true,
             closeButton: true,
@@ -420,6 +401,5 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
     }
 
     // scheduling tasks
-    $interval($scope.getRepositoryDetails, 5555);
-    $interval($scope.getPRs, 5555);
+    $interval($scope.getJenkinsOutput, 5555);
 });
