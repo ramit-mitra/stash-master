@@ -11,3 +11,5 @@ node_js:
 
 before_install:
   - docker build -t ramitmitra/stash-master .
+  - echo "$DOCKERPASSWORD" | docker login -u "$DOCKERUSERNAME" --password-stdin
+  - docker push ramitmitra/stash-master
