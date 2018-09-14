@@ -24,7 +24,7 @@ block navbar
           a.nav-link(ng-app="home", ng-controller="svcintgn", ng-click="showAbout()", href='#') About
 
 block content
-  .container
+  .container.animated.slideInLeft
     .row
       .col-12.text-center
         br
@@ -39,20 +39,20 @@ block content
   .container-fluid
     .row(ng-init="getRepoDetails()")
       .col-4(ng-repeat="item in stashlist")
-        .card.card-custom-home.bg-light
+        .card.card-custom-home.bg-light.animated.zoomIn
           .card-body.text-center
             h5.card-title {{item}}
             hr
             p.card-text Clone this repository,
-            h6.card-subtitle.mb-2.text-muted 
+            h6.card-subtitle.mb-2.text-muted
               kbd git clone http://{{host}}/{{item}}.git
               br
               br
               br
-              i.text-dark.fa.fa-clone.fa-2x#cpyCloneCmd(onClick="cloneCommandCopied()", data-clipboard-action="copy", data-clipboard-text="http://{{host}}/{{item}}.git", data-toggle="tooltip", data-placement="left", title="Copy repository URL")
+              i.text-dark.fas.fa-copy.fa-2x#cpyCloneCmd(onClick="cloneCommandCopied()", data-clipboard-action="copy", data-clipboard-text="http://{{host}}/{{item}}.git", data-toggle="tooltip", data-placement="left", title="Copy repository URL")
               span(style="margin-left: 5rem;") &nbsp;
               a.text-dark(href="/repository-dashboard/{{item}}")
-                i.fa.fa-tachometer.fa-2x(data-toggle="tooltip", data-placement="right", title="Goto repository dashboard")
+                i.fas.fa-archive.fa-2x(data-toggle="tooltip", data-placement="right", title="Goto repository dashboard")
               //- Adding copy to clipboard feature using clipboardJS
               script(src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js")
             br
@@ -63,7 +63,7 @@ block content
                 | &nbsp; Permissions
               button.btn.btn-outline-danger(ng-click="deleteRepo(item)", type='button', data-toggle="tooltip", data-placement="top", title="Allows you to permanently delete this repository from stash.") Delete Repository
   .container
-    .row
+    .row.animated.slideInLeft
       .col-12.text-center(ng-if="stashlist.length == 0")
         .alert.alert-primary.font-weight-bold 
           br
@@ -74,7 +74,7 @@ block content
           | Create a repository to get started !
           br
           br
-  .modal.fade#manageusrperm(tabindex='-1', role='dialog')
+  .modal.fade.animated.zoomInUp#manageusrperm(tabindex='-1', role='dialog')
     .modal-dialog(role='document')
       .modal-content
         .modal-header

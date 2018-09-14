@@ -183,7 +183,7 @@ app.controller('manageusers', function ($scope, $http, $interval) {
 app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
 
     $scope.repohistory = [$sce.trustAsHtml('<br><div class="text-center"><i class="fa fa-spin fa-spinner fa-4x"></i></div><br>')];
-    $scope.prdiff = $sce.trustAsHtml('<br>');
+    $scope.prdiff = $sce.trustAsHtml('<br><img src="https://png.icons8.com/carbon-copy/100/000000/file.png"><br>');
     $scope.selectedBranch = '';
     $scope.prmwip = '';
     $scope.webhooks = '';

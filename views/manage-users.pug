@@ -24,7 +24,7 @@ block navbar
           a.nav-link(ng-app="home", ng-controller="svcintgn", ng-click="showAbout()", href='#') About
 
 block content
-  .container(ng-init="getUsers()")
+  .container.animated.slideInLeft(ng-init="getUsers()")
     .row
       .col-12.text-center
         br
