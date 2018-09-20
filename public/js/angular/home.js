@@ -232,6 +232,8 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
                 for (x in res.data.data) {
                     $scope.repohistory.push($sce.trustAsHtml(res.data.data[x]));
                 }
+                //finally, generate gitgraph
+                $scope.generateGitGraph(branchname);
             }
         });
     }
@@ -363,6 +365,41 @@ app.controller('repodashboard', function ($scope, $http, $interval, $sce) {
         }
     }
 
+    $scope.generateGitGraph = function (branchname) {
+        console.log('generateGitGraph initiated');
+        console.log($scope.repodetails);
+        console.log($scope.repohistory);
+
+        // start building the graph
+        var gitgraph = new GitGraph({
+            template: "blackarrow",
+            orientation: "vertical",
+            mode: "compact"
+        });
+        // draw branch
+        let branchdraw = gitgraph.branch(branchname);
+        let i = 0;
+        $scope.repohistory.forEach(element => {
+            let strElement = $sce.valueOf(element);
+            // get commit title
+            let myRegexp = /(?:Commit title:(.*?)Details:)/gm;
+            let match = myRegexp.exec(strElement);
+            // get commit sha
+            myRegexp = /(?:Commit(.*?)<br>Author:)/gm;
+            let match2 = myRegexp.exec(strElement);
+            // drawing graph
+            branchdraw.commit({
+                // dotColor: "white",
+                dotSize: 10,
+                dotStrokeWidth: 10,
+                sha1: match2[1],
+                message: match[1].replace("<br>", "", "g"),
+                author: "Jacky <prince@dutunning.com>"
+            });
+        });
+
+    }
+
     // scheduling tasks
     $interval($scope.getRepositoryDetails, 5555);
     $interval($scope.getPRs, 5555);
@@ -392,7 +429,7 @@ app.controller('svcintgn', function ($scope, $http, $interval) {
 
     $scope.showAbout = function () {
         bootbox.dialog({
-            message: '<div class="container text-justify"><div class="row"><div class="col-12"><h1 class="display-4"><img src="https://png.icons8.com/bubbles/100/000000/man-in-blue-jacket-information.png">&nbsp;About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr><h2 class="display-4"><img src="https://png.icons8.com/color/100/000000/creative-commons.png">&nbsp;Attribution</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr><h2 class="display-4"><img src="https://png.icons8.com/clouds/100/000000/design.png">&nbsp;Coded and Designed by</h2> <br><h4 class="font-weight-light">Ramit Mitra, 2018</h4></div></div></div>',
+            message: '<div class="container text-justify"><div class="row"><div class="col-12"><h1 class="display-4"><img src="https://png.icons8.com/bubbles/100/000000/man-in-blue-jacket-information.png">&nbsp;About Stash Master</h1> <br><p class="font-weight-light">A concept standalone GIT Stash to create and store your GIT repositories, built entirely on NodeJS. <kbd>Stash Master</kbd> helps you manage user access and permission(s) for repositories.</p><hr><h2 class="display-4"><img src="https://png.icons8.com/color/100/000000/creative-commons.png">&nbsp;Attribution</h2> <br><p class="font-weight-normal">Icons used on this app have been provided by <a href="https://icons8.com/">icons8.com</a>. <br>This app has been built using NodeJS v8.11, AngularJS v1.7, Bootstrap 4 & PUG. <br>Special credits to NPM package <a href="https://www.npmjs.com/package/node-git-server">node-git-server</a>.</p><hr><h2 class="display-4"><img src="https://png.icons8.com/clouds/100/000000/design.png">&nbsp;Coded and Designed by</h2> <br><h4 class="font-weight-light">Ramit Mitra, 2018</h4><h5><a class="text-dark font-weight-normal" href="mailto:ramit.mitra@gmail.com?Subject=Stash%20Master%20Query" target="_top">ramit.mitra@gmail.com</a><h5></div></div></div>',
             onEscape: true,
             backdrop: true,
             closeButton: true,

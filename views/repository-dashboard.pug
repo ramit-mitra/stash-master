@@ -51,6 +51,7 @@ block content
                 | &nbsp; {{repodetails.branches.length}} Branches &nbsp;  
             .col-2
             .col-2
+              button.btn.btn-outline-dark.btn-sm.pull-right(data-toggle="modal", data-target="#networkGraphModal") Network Graph
             .col-2
               button.btn.btn-outline-dark.btn-sm.pull-right(data-toggle="modal", data-target="#webhookModal", ng-click="fetchWebhooks()") Webhook Configuration
             .col-2
@@ -74,12 +75,16 @@ block content
             h5.card-title.font-weight-light Choose a branch to view commit history
         //- Commit history card
         .card.card-custom-home.border-warning(ng-show="selectedBranch != ''")
-          .card-body
-            h5.card-title Commit History for 
-              kbd {{selectedBranch}}
-            hr
-            p.card.card-custom-home.border-dark.card-text.text-left(style="padding-left: 20px;", ng-repeat="item in repohistory", ng-bind-html="item")
-            hr        
+          .row
+            .col-4
+              canvas.container#gitGraph(style="padding-top: 5rem;")
+            .col-8
+              .card-body
+                h5.card-title Commit History for 
+                  kbd {{selectedBranch}}
+                hr
+                p.card.card-custom-home.border-dark.card-text.text-left(style="padding-left: 20px;", ng-repeat="item in repohistory", ng-bind-html="item")
+                hr        
       //- right sidebar
       .col-6.text-center
         //- Page load default card
@@ -159,3 +164,16 @@ block content
             label.mr-sm-4(for='inlineFormInputName2') &nbsp;
           br
           textarea#editor.container-fluid(rows="23", ng-show="webhookcontent.length > 0", ng-model="webhookcontent")
+  //- Network Graph modal
+  //- #networkGraphModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+  //-   .modal-dialog.modal-lg(role='document', style='max-width: 90% !important;')
+  //-     .modal-content
+  //-       .modal-header
+  //-         h5#exampleModalLabel.modal-title GIT Network Graph 
+  //-         button.close(type='button', data-dismiss='modal', aria-label='Close')
+  //-           span(aria-hidden='true') ×
+  //-       .modal-body(ng-init="generateGitGraph()")
+  //-         canvas.container#gitGraph
+  //- GitGraph JS
+  link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.13.0/gitgraph.min.css', async)
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.13.0/gitgraph.min.js', async)

@@ -56,7 +56,7 @@ router.get('/get-repository-details/:reponame', function (req, res) {
 router.get('/create-branch/:reponame/:branchname', function (req, res) {
     let reponame = req.params.reponame;
     let branchname = req.params.branchname;
-    
+
     // clone repository and create the branch
     // 1. checkout the code to a temporary dir
     let re = new RegExp(global.appPort, "g");
@@ -100,12 +100,15 @@ router.get('/get-commit-history/:reponame/:branchname', function (req, res) {
     let headCmd = 'cd ' + global.stashDir + ' && cd ' + reponame + '.git && ';
 
     // fetch custom formatted commit history
-    let history = shell.exec(headCmd + 'git log --format="*#*%ncommit %H%nAuthor: %aN <%ae>%nDate: %ad%nComitted approx %ar%n%nCommit title: %s%nDetails: %b%n%N" ' + branchname).stdout;
+    let history = shell.exec(headCmd + 'git log --format="*#*%nCommit %H%nAuthor: %aN <%ae>%nDate: %ad%nComitted approx %ar%n%nCommit title: %s%nDetails: %b%n%N" ' + branchname).stdout;
+    // let history = shell.exec(headCmd + 'git log --format="*#*%n$1$Commit %H$2$%nAuthor: %aN <%ae>%nDate: %ad%nComitted approx %ar%n%nCommit title: %s%nDetails: %b%n%N" ' + branchname).stdout;
     history = history.split('*#*');
 
     let historyL = [];
     for (let i in history) {
         let str = ((history[i].replace(/\n/g, "<br>")).trim());
+        // str = ((history[i].replace(/$1$/g, "<span class='font-weight-bold'>")).trim());
+        // str = ((history[i].replace(/$2$/g, "</span>")).trim());
         if (str != "")
             historyL.push(str)
     }
