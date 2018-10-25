@@ -19,3 +19,7 @@ before_install:
   - docker build -t ramitmitra/stash-master .
   - echo "$DOCKERPASSWORD" | docker login -u "$DOCKERUSERNAME" --password-stdin
   - docker push ramitmitra/stash-master
+
+# do notify me when things fail
+notifications:
+  email: false
