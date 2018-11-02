@@ -11,11 +11,11 @@
   "author": "Ramit Mitra",
   "license": "Apache-2.0",
   "dependencies": {
-    "ansi-to-html": "^0.6.6",
+    "ansi-to-html": "^0.6.8",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "dateformat": "^3.0.3",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "express-favicon": "^2.0.1",
     "http-errors": "^1.7.1",
     "morgan": "^1.9.1",
