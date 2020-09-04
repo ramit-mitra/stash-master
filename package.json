@@ -19,7 +19,7 @@
     "express-favicon": "^2.0.1",
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
-    "node-git-server": "^0.4.3",
+    "node-git-server": "^0.6.1",
     "pug": "^2.0.4",
     "randomstring": "^1.1.5",
     "rimraf": "^2.7.1",
