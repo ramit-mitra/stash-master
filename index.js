@@ -1,6 +1,6 @@
 /*!
  * stash-master
- * Copyright(c) 2018 Ramit Mitra
+ * Copyright(c) 2021 Ramit Mitra
  * MIT Licensed
  */
 
